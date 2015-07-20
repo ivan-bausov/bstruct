@@ -15,7 +15,7 @@ import TYPES = enums.TYPES
 class Compiler implements ICompiler<string> {
 
     constructor(data:Serialized<ItemData>) {
-        this.html = this.renderToHTML(data);
+        this.html = this.renderToHTML(data).replace(/{BLOCK}_/g, '');
     }
 
     public compile():string {
