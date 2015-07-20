@@ -10,6 +10,12 @@ export interface ItemData {
     type:string;
     name:string;
     tag:string;
+    attributes?: Attribute[]
+}
+
+export interface Attribute {
+    name: string;
+    value: string;
 }
 
 export interface Serialized<T> {

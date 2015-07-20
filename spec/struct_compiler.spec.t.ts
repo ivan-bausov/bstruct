@@ -7,10 +7,12 @@
 import fs = require('fs');
 import interfaces = require('../compiler.i');
 import Compiler = require('../struct_compiler.t');
+import enums = require('../compiler.e');
 import Helpers = require('./helpers.t');
 
 import ItemData = interfaces.ItemData;
 import IItem = interfaces.IItem;
+import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
@@ -34,14 +36,14 @@ describe('struct_compiler.compile', () => {
             children: [
                 {
                     data: {
-                        type: Compiler.ITEM_TYPE.BLOCK,
+                        type: TYPES.BLOCK,
                         name: 'header',
                         tag: 'div'
                     },
                     children: [
                         {
                             data: {
-                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                type: TYPES.ELEMENT,
                                 name: 'logo',
                                 tag: 'img'
                             },
@@ -49,7 +51,7 @@ describe('struct_compiler.compile', () => {
                         },
                         {
                             data: {
-                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                type: TYPES.ELEMENT,
                                 name: null,
                                 tag: 'a'
                             },
@@ -57,14 +59,14 @@ describe('struct_compiler.compile', () => {
                         },
                         {
                             data: {
-                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                type: TYPES.ELEMENT,
                                 name: 'info',
                                 tag: null
                             },
                             children: [
                                 {
                                     data: {
-                                        type: Compiler.ITEM_TYPE.ELEMENT,
+                                        type: TYPES.ELEMENT,
                                         name: 'cart',
                                         tag: 'a'
                                     },
@@ -72,7 +74,7 @@ describe('struct_compiler.compile', () => {
                                 },
                                 {
                                     data: {
-                                        type: Compiler.ITEM_TYPE.ELEMENT,
+                                        type: TYPES.ELEMENT,
                                         name: 'login',
                                         tag: 'a'
                                     },
@@ -82,7 +84,7 @@ describe('struct_compiler.compile', () => {
                         },
                         {
                             data: {
-                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                type: TYPES.ELEMENT,
                                 name: 'description',
                                 tag: null
                             },
@@ -92,14 +94,14 @@ describe('struct_compiler.compile', () => {
                 },
                 {
                     data: {
-                        type: Compiler.ITEM_TYPE.BLOCK,
+                        type: TYPES.BLOCK,
                         name: 'footer',
                         tag: null
                     },
                     children: [
                         {
                             data: {
-                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                type: TYPES.ELEMENT,
                                 name: 'copyright',
                                 tag: null
                             },
@@ -121,41 +123,41 @@ describe('struct_compiler.compile', () => {
                 {
                     data: {
                         name: 'test',
-                        type: Compiler.ITEM_TYPE.BLOCK,
-                        tag: null
+                        type: TYPES.BLOCK,
+                        tag: null,
+                        attributes: [
+                            {
+                                name: 'id',
+                                value: 'main'
+                            }
+                        ]
                     },
                     children: [
                         {
                             data: {
                                 name: 'test',
-                                type: Compiler.ITEM_TYPE.ELEMENT,
-                                tag: 'img'
+                                type: TYPES.ELEMENT,
+                                tag: 'img',
+                                attributes: [
+                                    {
+                                        name: 'id',
+                                        value: 'test_id'
+                                    },
+                                    {
+                                        name: 'width',
+                                        value: '300'
+                                    }
+                                ]
                             },
-                            children: [],
-                            attributes: [
-                                {
-                                    name: 'id',
-                                    value: 'test_id'
-                                },
-                                {
-                                    name: 'width',
-                                    value: 300
-                                }
-                            ]
+                            children: []
                         },
                         {
                             data: {
                                 name: 'test',
-                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                type: TYPES.ELEMENT,
                                 tag: 'img'
                             },
                             children: []
-                        }
-                    ],
-                    attributes: [
-                        {
-                            name: 'id',
-                            value: 'main'
                         }
                     ]
                 }
@@ -171,7 +173,7 @@ describe('StructCompiler.parseBlockDeclaration', () => {
     test({
         source: 'b:test',
         result: {
-            type: Compiler.ITEM_TYPE.BLOCK,
+            type: TYPES.BLOCK,
             name: 'test',
             tag: null
         }
@@ -180,7 +182,7 @@ describe('StructCompiler.parseBlockDeclaration', () => {
     test({
         source: 'b:test>a',
         result: {
-            type: Compiler.ITEM_TYPE.BLOCK,
+            type: TYPES.BLOCK,
             name: 'test',
             tag: 'a'
         }
@@ -189,7 +191,7 @@ describe('StructCompiler.parseBlockDeclaration', () => {
     test({
         source: '  b:   test  > a  ',
         result: {
-            type: Compiler.ITEM_TYPE.BLOCK,
+            type: TYPES.BLOCK,
             name: 'test',
             tag: 'a'
         }
@@ -197,16 +199,19 @@ describe('StructCompiler.parseBlockDeclaration', () => {
 
     testError({
         source: 'b>test:a',
+        line_number: 5,
         error: Compiler.Errors.BLOCK_DECLARATION_SYNTAX_ERROR
     });
 
     testError({
         source: 'b:',
+        line_number: 7,
         error: Compiler.Errors.BLOCK_DECLARATION_SYNTAX_ERROR
     });
 
     testError({
         source: 'b:>a',
+        line_number: 5,
         error: Compiler.Errors.BLOCK_DECLARATION_SYNTAX_ERROR
     });
 
@@ -215,7 +220,7 @@ describe('StructCompiler.parseBlockDeclaration', () => {
         result: ItemData;
     }) {
         it(options.source, () => {
-            var parse_result:ItemData = Compiler.parseBlockDeclaration(options.source);
+            var parse_result:ItemData = Compiler.parseBlockDeclaration(options.source, 4);
             expect(parse_result).toEqual(options.result);
         });
     }
@@ -223,9 +228,10 @@ describe('StructCompiler.parseBlockDeclaration', () => {
     function testError(options:{
         source:string;
         error: string;
+        line_number: number;
     }) {
         it(options.source, () => {
-            expect(() => Compiler.parseBlockDeclaration(options.source)).toThrowError(options.error);
+            expect(() => Compiler.parseBlockDeclaration(options.source, options.line_number)).toThrowError(options.error + ' at line:' + options.line_number + ':' + options.source);
         });
     }
 });
@@ -235,7 +241,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
     test({
         source: 'e:',
         result: {
-            type: Compiler.ITEM_TYPE.ELEMENT,
+            type: TYPES.ELEMENT,
             name: null,
             tag: null
         }
@@ -244,7 +250,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
     test({
         source: 'e:test',
         result: {
-            type: Compiler.ITEM_TYPE.ELEMENT,
+            type: TYPES.ELEMENT,
             name: 'test',
             tag: null
         }
@@ -253,7 +259,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
     test({
         source: 'e:test>a',
         result: {
-            type: Compiler.ITEM_TYPE.ELEMENT,
+            type: TYPES.ELEMENT,
             name: 'test',
             tag: 'a'
         }
@@ -262,7 +268,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
     test({
         source: 'e:>a',
         result: {
-            type: Compiler.ITEM_TYPE.ELEMENT,
+            type: TYPES.ELEMENT,
             name: null,
             tag: 'a'
         }
@@ -271,7 +277,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
     test({
         source: '  e:   test  > a  ',
         result: {
-            type: Compiler.ITEM_TYPE.ELEMENT,
+            type: TYPES.ELEMENT,
             name: 'test',
             tag: 'a'
         }
@@ -279,6 +285,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
 
     testError({
         source: 'e>test:a',
+        line_number: 5,
         error: Compiler.Errors.ELEMENT_DECLARATION_SYNTAX_ERROR
     });
 
@@ -287,7 +294,7 @@ describe('struct_compiler.parseElementDeclaration', () => {
         result: ItemData;
     }) {
         it(options.source, () => {
-            var parse_result:ItemData = Compiler.parseElementDeclaration(options.source);
+            var parse_result:ItemData = Compiler.parseElementDeclaration(options.source, 4);
             expect(parse_result).toEqual(options.result);
         });
     }
@@ -295,9 +302,10 @@ describe('struct_compiler.parseElementDeclaration', () => {
     function testError(options:{
         source:string;
         error: string;
+        line_number: number;
     }) {
         it(options.source, () => {
-            expect(() => Compiler.parseElementDeclaration(options.source)).toThrowError(options.error);
+            expect(() => Compiler.parseElementDeclaration(options.source, options.line_number)).toThrowError(options.error + ' at line:' + options.line_number + ':' + options.source);
         });
     }
 });
