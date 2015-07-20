@@ -22,6 +22,13 @@ describe('compiler.getHTML', () => {
 
         expect(compiler.getHTML()).toBe(result);
     });
+
+    it('compiler.getHTML', () => {
+        var compiler = new Compiler(readContent('/sources/attributes_support.ctdl')),
+            result = readContent('/sources/attributes_support.result.html');
+
+        expect(compiler.getHTML()).toBe(result);
+    });
 });
 
 describe('compiler.getSCSS', () => {
