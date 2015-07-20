@@ -112,6 +112,58 @@ describe('struct_compiler.compile', () => {
 
     });
 
+    it('attributes_support', () => {
+        var compiler = new Compiler(readContent('/sources/attributes_support.ctdl'));
+
+        expect(compiler.compile()).toEqual({
+            data: null,
+            children: [
+                {
+                    data: {
+                        name: 'test',
+                        type: Compiler.ITEM_TYPE.BLOCK,
+                        tag: null
+                    },
+                    children: [
+                        {
+                            data: {
+                                name: 'test',
+                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                tag: 'img'
+                            },
+                            children: [],
+                            attributes: [
+                                {
+                                    name: 'id',
+                                    value: 'test_id'
+                                },
+                                {
+                                    name: 'width',
+                                    value: 300
+                                }
+                            ]
+                        },
+                        {
+                            data: {
+                                name: 'test',
+                                type: Compiler.ITEM_TYPE.ELEMENT,
+                                tag: 'img'
+                            },
+                            children: []
+                        }
+                    ],
+                    attributes: [
+                        {
+                            name: 'id',
+                            value: 'main'
+                        }
+                    ]
+                }
+            ]
+        });
+
+    });
+
 });
 
 describe('StructCompiler.parseBlockDeclaration', () => {
@@ -261,7 +313,7 @@ describe('Compiler.parseLevel', () => {
     it('7', () => test('       4', 2));
     it('8', () => test('        3', 2));
 
-    function test(str:string, level:number){
+    function test(str:string, level:number) {
         expect(Compiler.parseLevel(str)).toBe(level);
     }
 });
