@@ -8,6 +8,7 @@ import enums = require('./compiler.e');
 
 import ICompiler = interfaces.ICompiler;
 import ItemData = interfaces.ItemData;
+import Attribute = interfaces.Attribute;
 import Serialized = interfaces.Serialized;
 import TYPES = enums.TYPES
 
@@ -50,14 +51,26 @@ class Compiler implements ICompiler<string> {
 
     private static renderToHTMLTemplate(item:Serialized<ItemData>):string {
         var template:string,
-            name:string;
+            name:string,
+            attributes: Attribute[],
+            attributes_string: string;
 
         if (item.data) {
+            attributes = item.data.attributes || [];
             template = Compiler.TEMPLATES[item.data.tag] || Compiler.TEMPLATES['ANY'];
             name = Compiler.compileItemName(item);
-            name = name ? ' class="' + name + '"' : '';
+            if(name){
+                attributes.unshift({
+                    name: 'class',
+                    value: name
+                });
+            }
 
-            return template.replace('{name}', name).replace(/{tag}/g, item.data.tag || 'div');
+            attributes_string = _.map(attributes, (attribute:Attribute) => {
+                return attribute.name + '="' + attribute.value + '"';
+            }).join(' ');
+
+            return template.replace('{attributes}', attributes_string ? ' ' + attributes_string : attributes_string).replace(/{tag}/g, item.data.tag || 'div');
         } else {
             return '{CHILDREN}';
         }
@@ -79,9 +92,9 @@ class Compiler implements ICompiler<string> {
 
     private html:string;
     private static TEMPLATES:_.Dictionary<string> = {
-        'a': '<a{name} href="#" title="">{CHILDREN}</a>',
-        'img': '<img{name} src="" alt=""/>',
-        'ANY': '<{tag}{name}>{CHILDREN}</{tag}>'
+        'a': '<a{attributes} href="#" title="">{CHILDREN}</a>',
+        'img': '<img{attributes} src="" alt=""/>',
+        'ANY': '<{tag}{attributes}>{CHILDREN}</{tag}>'
     };
 }
 

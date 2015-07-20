@@ -8,27 +8,26 @@ import enums = require('./compiler.e');
 import Tree = require('./tree.t');
 
 import ItemData = interfaces.ItemData;
+import Attribute = interfaces.Attribute;
 import Serialized = interfaces.Serialized;
 import ICompiler = interfaces.ICompiler;
 import TYPES = enums.TYPES;
 
-class Compiler implements ICompiler<Serialized<ItemData>> {
+interface Declaration {
+    type:string;
+    pattern: RegExp;
+    parser:(line_data:string, line_number:number)=>any
+};
 
-    static ITEM_TYPE = TYPES;
+class Compiler implements ICompiler<Serialized<ItemData>> {
     static Errors = {
         BLOCK_DECLARATION_SYNTAX_ERROR: "BLOCK declaration syntax error",
-        ELEMENT_DECLARATION_SYNTAX_ERROR: "ELEMENT declaration syntax error"
+        ELEMENT_DECLARATION_SYNTAX_ERROR: "ELEMENT declaration syntax error",
+        ATTRIBUTE_DECLARATION_SYNTAX_ERROR: "ATTRIBUTE declaration syntax error"
     };
 
     constructor(data:string){
         this.source_strings = data.split('\n');
-
-        this.declaration_parsers[Compiler.ITEM_TYPE.BLOCK] = Compiler.parseBlockDeclaration;
-        this.declaration_parsers[Compiler.ITEM_TYPE.ELEMENT] = Compiler.parseElementDeclaration;
-
-        this.declaration_patterns[Compiler.ITEM_TYPE.BLOCK] = /^(:?\s)*b\:.+$/;
-        this.declaration_patterns[Compiler.ITEM_TYPE.ELEMENT] = /^(:?\s)*e\:.+$/;
-
         this.buildTree();
     }
 
@@ -38,21 +37,34 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
 
     private buildTree():void {
         _.each(this.source_strings, (line:string, index:number) => {
-            var declaration_type:string = null;
+            var declaration_selected:Declaration = null,
+                declaration:Declaration,
+                max:number,
+                i:number;
 
             if(!line.trim()){
                 return;
             }
 
-            _.each(this.declaration_patterns, (pattern, type) => {
-                if(pattern.test(line)) {
-                    declaration_type = type;
+            for(i = 0, max = Compiler.declarations.length; i < max; i ++) {
+                declaration = Compiler.declarations[i];
+                if(declaration.pattern.test(line)) {
+                    declaration_selected = declaration;
+                    break;
                 }
-            });
+            }
 
-            if(declaration_type) {
+            if(declaration_selected) {
                 this.tree.upTo(Compiler.parseLevel(line));
-                this.tree.add(this.declaration_parsers[declaration_type](line));
+                if(declaration_selected.type === TYPES.ATTRIBUTE) {
+                    var info:ItemData = this.tree.get().getInfo();
+                    if (!info.attributes) {
+                        info.attributes = [];
+                    }
+                    info.attributes.push(declaration_selected.parser(line, index));
+                } else {
+                    this.tree.add(declaration_selected.parser(line, index));
+                }
             } else {
                 throw new Error('Unnable to parse code at line: ' + index + ':' + line);
             }
@@ -72,25 +84,44 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
         return delta ? count + 1 : count ;
     }
 
-    public static parseBlockDeclaration(line:string):ItemData{
+    public static parseBlockDeclaration(line:string, index:number):ItemData{
         return Compiler.parseDeclaration(
             line,
             /^\s*b\:\s*([^>\s]+)(:?\s*>\s*(\S+))?\s*$/,
-            Compiler.ITEM_TYPE.BLOCK,
-            Compiler.Errors.BLOCK_DECLARATION_SYNTAX_ERROR
+            TYPES.BLOCK,
+            Compiler.Errors.BLOCK_DECLARATION_SYNTAX_ERROR,
+            index
         );
     }
 
-    public static parseElementDeclaration(line:string):ItemData{
+    public static parseElementDeclaration(line:string, index:number):ItemData{
         return Compiler.parseDeclaration(
             line,
             /^\s*e\:\s*([^>\s]+)?(:?\s*>\s*(\S+))?\s*$/,
-            Compiler.ITEM_TYPE.ELEMENT,
-            Compiler.Errors.ELEMENT_DECLARATION_SYNTAX_ERROR
+            TYPES.ELEMENT,
+            Compiler.Errors.ELEMENT_DECLARATION_SYNTAX_ERROR,
+            index
         );
     }
 
-    public static parseDeclaration(line:string, pattern:RegExp, item_type:string, error_message:string):ItemData{
+    public static parseAttributeDeclaration(line:string, index:number):Attribute {
+        var matches:string[] = line.match(/^\s*(\S+)\s*\:\s*(\S+)\s*$/);
+
+        if (matches) {
+            return {
+                name: matches[1],
+                value: matches[2]
+            };
+        } else {
+            throw Compiler.createError(
+                Compiler.Errors.ATTRIBUTE_DECLARATION_SYNTAX_ERROR,
+                line,
+                index
+            );
+        }
+    }
+
+    public static parseDeclaration(line:string, pattern:RegExp, item_type:string, error_message:string, index):ItemData{
         var matches = line.match(pattern),
             item_data:ItemData = null;
 
@@ -101,16 +132,39 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
                 tag: matches[3] || null
             };
         } else {
-            throw Error(error_message);
+            throw Compiler.createError(
+                error_message,
+                line,
+                index
+            );
         }
 
         return item_data;
     }
 
+    private static createError(message:string, line:string, line_number:number){
+        return new Error(message + ' at line:' + line_number + ':' + line);
+    }
+
     private source_strings:string[] = [];
     private tree:Tree<ItemData> = new Tree<ItemData>();
-    private declaration_patterns:_.Dictionary<RegExp> = {};
-    private declaration_parsers:_.Dictionary<(string)=>ItemData> = {};
+    private static declarations: Declaration[] = [
+        {
+            type: TYPES.BLOCK,
+            pattern: /^(:?\s)*b\:.+$/,
+            parser: Compiler.parseBlockDeclaration
+        },
+        {
+            type: TYPES.ELEMENT,
+            pattern: /^(:?\s)*e\:.+$/,
+            parser: Compiler.parseElementDeclaration
+        },
+        {
+            type: TYPES.ATTRIBUTE,
+            pattern: /^\s*(\S+)\s*\:\s*(\S+)\s*$/,
+            parser: Compiler.parseAttributeDeclaration
+        }
+    ];
 }
 
 export = Compiler;

@@ -4,5 +4,6 @@
 
 export var TYPES = {
     ELEMENT: 'element',
-    BLOCK: 'block'
+    BLOCK: 'block',
+    ATTRIBUTE: 'attribute'
 };
