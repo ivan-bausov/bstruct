@@ -15,38 +15,49 @@ import TYPES = enums.TYPES
 class Compiler implements ICompiler<string> {
 
     constructor(data:Serialized<ItemData>) {
-        this.html = this.renderToHTML(data).replace(/{BLOCK}_/g, '');
+        this.html = Compiler.render(data).replace(/{BLOCK}_/g, '');
     }
 
     public compile():string {
         return this.html;
     }
 
-    private renderToHTML(item:Serialized<ItemData>):string {
+    private static render(item:Serialized<ItemData>):string {
         var html:string = Compiler.renderToHTMLTemplate(item),
-            children_html:string[] = [],
-            children_html_string:string;
+            children_html:string[] = Compiler.renderChildren(item.children),
+            children_html_string:string = Compiler.getFormatedChildrenString(children_html, item);
 
-        _.each(item.children, (child) => {
-            children_html.push(this.renderToHTML(child));
-        });
+        return Compiler.applyChildren(html, children_html_string);
+    }
+
+    private static applyChildren(parent_code: string, children_code:string):string {
+        children_code = parent_code !== '{CHILDREN}' && children_code ? '\n' + children_code + '\n' : children_code;
+
+        return parent_code.replace('{CHILDREN}', children_code);
+    }
+
+    private static getFormatedChildrenString(strings:string[], item: Serialized<ItemData>):string{
+        var result:string;
 
         if (item.data) {
-            children_html_string = _.map(children_html.join('\n').split('\n'), (str:string) => {
+            result = _.map(strings.join('\n').split('\n'), (str:string) => {
                 return str && ('    ' + str);
             }).join('\n');
+
+            if (item.data.type === TYPES.BLOCK) {
+                result = result.replace(/{BLOCK}/g, item.data.name);
+            }
         } else {
-            children_html_string = children_html.join('\n');
+            result = strings.join('\n');
         }
 
-        if (item.data && item.data.type === TYPES.BLOCK) {
-            children_html_string = children_html_string.replace(/{BLOCK}/g, item.data.name);
-        }
+        return result;
+    }
 
-        children_html_string = children_html_string || '';
-        children_html_string = html !== '{CHILDREN}' && children_html_string ? '\n' + children_html_string + '\n' : children_html_string;
-
-        return html.replace('{CHILDREN}', children_html_string);
+    private static renderChildren(children: Serialized<ItemData>[]):string[] {
+        return _.map(children, (child) => {
+            return Compiler.render(child);
+        });
     }
 
     private static renderToHTMLTemplate(item:Serialized<ItemData>):string {
@@ -70,7 +81,9 @@ class Compiler implements ICompiler<string> {
                 return attribute.name + '="' + attribute.value + '"';
             }).join(' ');
 
-            return template.replace('{attributes}', attributes_string ? ' ' + attributes_string : attributes_string).replace(/{tag}/g, item.data.tag || 'div');
+            return template
+                .replace('{attributes}', attributes_string ? ' ' + attributes_string : attributes_string)
+                .replace(/{tag}/g, item.data.tag || 'div');
         } else {
             return '{CHILDREN}';
         }
