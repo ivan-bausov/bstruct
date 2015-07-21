@@ -1,0 +1,15 @@
+{
+  "name": "bstruct",
+  "version": "0.0.1",
+  "description": "Compile easy to write B:STRUCT schemas into HTML and SCSS templates.",
+  "bin": "./bin/bstruct",
+  "author": "Ivan Bausov",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ivan-bausov/bstruct.git"
+  },
+  "dependencies": {
+    "underscore": "latest"
+  }
+}
