@@ -12,9 +12,11 @@ import Attribute = interfaces.Attribute;
 import Serialized = interfaces.Serialized;
 import TYPES = enums.TYPES
 
+interface Item extends Serialized<ItemData>{}
+
 class Compiler implements ICompiler<string> {
 
-    constructor(data:Serialized<ItemData>) {
+    constructor(data:Item) {
         this.html = Compiler.render(data).replace(/{BLOCK}_/g, '');
     }
 
@@ -22,25 +24,24 @@ class Compiler implements ICompiler<string> {
         return this.html;
     }
 
-    private static render(item:Serialized<ItemData>):string {
-        var html:string = Compiler.renderToHTMLTemplate(item),
-            children_html:string[] = Compiler.renderChildren(item.children),
-            children_html_string:string = Compiler.getFormatedChildrenString(children_html, item);
+    private static render(item:Item):string {
+        var item_code:string = Compiler.renderItem(item),
+            children_code:string = Compiler.renderChildren(item);
 
-        return Compiler.applyChildren(html, children_html_string);
+        return Compiler.applyChildren(item_code, children_code);
     }
 
-    private static applyChildren(parent_code: string, children_code:string):string {
-        children_code = parent_code !== '{CHILDREN}' && children_code ? '\n' + children_code + '\n' : children_code;
+    private static applyChildren(item_code: string, children_code:string):string {
+        children_code = item_code !== '{CHILDREN}' && children_code ? '\n' + children_code + '\n' : children_code;
 
-        return parent_code.replace('{CHILDREN}', children_code);
+        return item_code.replace('{CHILDREN}', children_code);
     }
 
-    private static getFormatedChildrenString(strings:string[], item: Serialized<ItemData>):string{
+    private static mergeChildren(children:string[], item:Item):string {
         var result:string;
 
         if (item.data) {
-            result = _.map(strings.join('\n').split('\n'), (str:string) => {
+            result = _.map(children.join('\n').split('\n'), (str:string) => {
                 return str && ('    ' + str);
             }).join('\n');
 
@@ -48,19 +49,22 @@ class Compiler implements ICompiler<string> {
                 result = result.replace(/{BLOCK}/g, item.data.name);
             }
         } else {
-            result = strings.join('\n');
+            result = children.join('\n');
         }
 
         return result;
     }
 
-    private static renderChildren(children: Serialized<ItemData>[]):string[] {
-        return _.map(children, (child) => {
-            return Compiler.render(child);
-        });
+    private static renderChildren(item:Item):string {
+        return Compiler.mergeChildren(
+            _.map(item.children, (child) => {
+                return Compiler.render(child);
+            }),
+            item
+        );
     }
 
-    private static renderToHTMLTemplate(item:Serialized<ItemData>):string {
+    private static renderItem(item:Item):string {
         var template:string,
             name:string,
             attributes: Attribute[],
@@ -89,7 +93,7 @@ class Compiler implements ICompiler<string> {
         }
     }
 
-    private static compileItemName(item:Serialized<ItemData>):string {
+    private static compileItemName(item:Item):string {
         var data:ItemData = item.data;
 
         if(data.type === TYPES.BLOCK) {
