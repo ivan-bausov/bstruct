@@ -1,6 +1,8 @@
 /**
- * Created by Ivan on 15/07/15.
+ * Copyright (c) 2015 Ivan Bausov <ivan.bausov@gmail.com> (MIT Licensed)
+ * A part of B:STRUCT package <https://github.com/ivan-bausov/bstruct>
  */
+
 /// <reference path="./definitions/node-0.10.d.ts" />
 /// <reference path="./definitions/node-0.10.d.ts" />
 /// <reference path="./definitions/underscore.d.ts" />

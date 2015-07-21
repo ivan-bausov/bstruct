@@ -1,5 +1,6 @@
 /**
- * Created by Ivan on 18/07/15.
+ * Copyright (c) 2015 Ivan Bausov <ivan.bausov@gmail.com> (MIT Licensed)
+ * A part of B:STRUCT package <https://github.com/ivan-bausov/bstruct>
  */
 
 import _ = require('underscore');
