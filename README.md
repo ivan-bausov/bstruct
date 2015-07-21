@@ -34,6 +34,7 @@ is compiled into appropriate HTML and SCSS-templates:
     }
 }
 ```
+
 ##Usage
 Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For, example run command:
 ```
@@ -41,8 +42,10 @@ $ bstruct --watch test.ctdl
 ```
 to watch and compile test.ctdl file into test.html and test.scss files. Use **.ctdl** extention for your B:STRUCT files to compile.
 **Note!** The executable bin file for B:STRUCT watcher is placed in **bin** folder of bstruct node module folder. If **bstruct** command does not work after the installation by default, try to add this folder to your PATH or create a symlink inside your bin folder.
+
 ##Syntax
-###BLOCKs and ELEMENTS declarations
+
+###Declarations
 B:STRUCT uses two main logical entities to describe page markup structure.
 **BLOCK** represents complete logical part of web-site page like header, footer, popup, sale-block and etc. **BLOCK** contains **ELEMENTS** that represent its markup (for example, logo inside header, button inside product sale block and etc.).
 Every **BLOCK** must have an unique name (class name in HTML and CSS). 
@@ -52,20 +55,18 @@ Use:
 b:header
 ```
 to declare block with name 'header' ('block-header' class name in markup).
+```html
+<div class="block-header"></div>
+```
 
-Use '>' operand to specify HTML-tag to use in markup for your block:
+Use **'>'** operand to specify HTML-tag to use in markup for your block:
 ```
 b:header>ul
 ```
 creates UL HTML-element with 'block-header' class name.
-
-Use key:value pairs to specify attributes for your block:
+```html
+<ul class="block-header"></ul>
 ```
-b:logo>img
-    id:main
-    width:300
-```
-creates IMG HTML-element with class name 'block-logo', and attributes id="main" and width="300".
 
 **ELEMENT** must have an unique name inside its block. To provide element name uniqueness inside whole web-page B:STRUCT preprocessor prepends ELEMENT name with its parent block name. For example:
 ```
@@ -73,6 +74,25 @@ b:header
     e:auth
 ```
 e:auth structure compiles into DIV HTML-element with 'header_auth' CSS-class name.
+```html
+<div class="block-header">
+    <div class="header_auth"></div>
+</div>
+```
+
 **ELEMENT** declaration supports '>' and key:value syntax too.
+
 ###Nesting
 To declare nested elements use ``4-spaces length`` offsets.
+
+###Attributes
+Use **key:value** pairs to specify attributes for your block:
+```
+b:stats>table
+    id:main
+    width:300
+```
+creates IMG HTML-element with class name 'block-logo', and attributes id="main" and width="300".
+```html
+<table class="block-stats" id="main" width="300"></table>
+```
