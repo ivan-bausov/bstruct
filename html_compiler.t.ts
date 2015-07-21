@@ -19,17 +19,27 @@ interface Templates extends _.Dictionary<string> {
     EMPTY:string;
 }
 
+/**
+ * Placeholders used in templates;
+ */
 class Placeholders {
-    public static CHILDREN:string = '{CHILDREN}';
-    public static BLOCK:string = '{BLOCK}';
-    public static ATTRIBUTES:string = '{ATTRIBUTES}';
-    public static TAG:string = '{TAG}';
+    public static CHILDREN:string = '{CHILDREN}';//children HTML
+    public static BLOCK:string = '{BLOCK}';//parent BLOCK name
+    public static ATTRIBUTES:string = '{ATTRIBUTES}';//html tag attributes
+    public static TAG:string = '{TAG}';//tag name
 }
 
+/**
+ * Represents single item render logic
+ */
 class HtmlItem {
     constructor(private data:ItemData) {
     }
 
+    /**
+     * returns item name according to its type
+     * @returns {string}
+     */
     public getName():string {
         var data:ItemData = this.data;
 
@@ -43,6 +53,10 @@ class HtmlItem {
         }
     }
 
+    /**
+     * returns item HTML
+     * @returns {string}
+     */
     public getHTML():string {
         var attributes_string: string;
 
@@ -56,6 +70,10 @@ class HtmlItem {
         }
     }
 
+    /**
+     * Calculates item html attributes string
+     * @returns {string}
+     */
     public getAttributesString():string {
         var attributes_string:string = '',
             data:ItemData = this.data,
@@ -80,14 +98,28 @@ class HtmlItem {
         return attributes_string;
     }
 
+    /**
+     * returns appropriate CSS-class name for BLOCK name
+     * @param name
+     * @returns {string}
+     */
     private static getBlockName(name:string):string {
         return 'block-' + name;
     }
 
+    /**
+     * returns appropriate CSS-class name for ELEMENT name
+     * @param name
+     * @returns {string}
+     */
     private static getElementName(name:string):string {
         return name ? Placeholders.BLOCK + '_' + name : null;
     }
 
+    /**
+     * HTML tag templates
+     * @type {{a: string, img: string, ANY: string, EMPTY: string}}
+     */
     public static TEMPLATES:Templates = {
         'a': '<a' + Placeholders.ATTRIBUTES + ' href="#" title="">' + Placeholders.CHILDREN + '</a>',
         'img': '<img' + Placeholders.ATTRIBUTES + ' src="" alt=""/>',
