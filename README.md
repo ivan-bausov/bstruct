@@ -92,7 +92,7 @@ b:stats>table
     id:main
     width:300
 ```
-creates IMG HTML-element with class name 'block-logo', and attributes id="main" and width="300".
+creates TABLE HTML-element with class name 'block-stats', and attributes id="main" and width="300".
 ```html
 <table class="block-stats" id="main" width="300"></table>
 ```
