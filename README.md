@@ -37,11 +37,12 @@ is compiled into appropriate HTML and SCSS-templates:
 ##Usage
 Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For, example run command:
 ```
-bstruct --watch test.ctdl
+$ bstruct --watch test.ctdl
 ```
 to watch and compile test.ctdl file into test.html and test.scss files. Use **.ctdl** extention for your B:STRUCT files to compile.
 **Note!** The executable bin file for B:STRUCT watcher is placed in **bin** folder of bstruct node module folder. If **bstruct** command does not work after the installation by default, try to add this folder to your PATH or create a symlink inside your bin folder.
 ##Syntax
+###BLOCKs and ELEMENTS declarations
 B:STRUCT uses two main logical entities to describe page markup structure.
 **BLOCK** represents complete logical part of web-site page like header, footer, popup, sale-block and etc. **BLOCK** contains **ELEMENTS** that represent its markup (for example, logo inside header, button inside product sale block and etc.).
 Every **BLOCK** must have an unique name (class name in HTML and CSS). 
@@ -72,4 +73,6 @@ b:header
     e:auth
 ```
 e:auth structure compiles into DIV HTML-element with 'header_auth' CSS-class name.
-**ElEMENT** declaration supports '>' and key:value syntax too.
+**ELEMENT** declaration supports '>' and key:value syntax too.
+###Nesting
+To declare nested elements use ``4-spaces length`` offsets.
