@@ -65,3 +65,11 @@ b:logo>img
     width:300
 ```
 creates IMG HTML-element with class name 'block-logo', and attributes id="main" and width="300".
+
+**ELEMENT** must have an unique name inside its block. To provide element name uniqueness inside whole web-page B:STRUCT preprocessor prepends ELEMENT name with its parent block name. For example:
+```
+b:header
+    e:auth
+```
+e:auth structure compiles into DIV HTML-element with 'header_auth' CSS-class name.
+**ElEMENT** declaration supports '>' and key:value syntax too.
