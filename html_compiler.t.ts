@@ -32,7 +32,9 @@ class Compiler implements ICompiler<string> {
     }
 
     private static applyChildren(item_code: string, children_code:string):string {
-        children_code = item_code !== '{CHILDREN}' && children_code ? '\n' + children_code + '\n' : children_code;
+        if(children_code && item_code !== '{CHILDREN}') {
+            children_code = '\n' + children_code + '\n';
+        }
 
         return item_code.replace('{CHILDREN}', children_code);
     }
