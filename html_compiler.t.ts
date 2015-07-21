@@ -14,10 +14,92 @@ import TYPES = enums.TYPES
 
 interface Item extends Serialized<ItemData>{}
 
+interface Templates extends _.Dictionary<string> {
+    ANY:string;
+    EMPTY:string;
+}
+
+class Placeholders {
+    public static CHILDREN:string = '{CHILDREN}';
+    public static BLOCK:string = '{BLOCK}';
+    public static ATTRIBUTES:string = '{ATTRIBUTES}';
+    public static TAG:string = '{TAG}';
+}
+
+class HtmlItem {
+    constructor(private data:ItemData) {
+    }
+
+    public getName():string {
+        var data:ItemData = this.data;
+
+        switch (data && data.type) {
+            case TYPES.BLOCK:
+                return HtmlItem.getBlockName(data.name);
+            case TYPES.ELEMENT:
+                return HtmlItem.getElementName(data.name);
+            default :
+                return null;
+        }
+    }
+
+    public getHTML():string {
+        var attributes_string: string;
+
+        if (this.data) {
+            attributes_string = this.getAttributesString();
+            return (HtmlItem.TEMPLATES[this.data.tag] || HtmlItem.TEMPLATES.ANY)
+                .replace(Placeholders.ATTRIBUTES, attributes_string ? ' ' + attributes_string : attributes_string)
+                .replace(new RegExp(Placeholders.TAG, 'g'), this.data.tag || 'div');
+        } else {
+            return HtmlItem.TEMPLATES.EMPTY;
+        }
+    }
+
+    public getAttributesString():string {
+        var attributes_string:string = '',
+            data:ItemData = this.data,
+            attributes:Attribute[];
+
+        if(data) {
+            attributes = data.attributes || [];
+
+            name = this.getName();
+            if(name){
+                attributes.unshift({
+                    name: 'class',
+                    value: name
+                });
+            }
+
+            attributes_string = _.map(attributes, (attribute:Attribute) => {
+                return attribute.name + '="' + attribute.value + '"';
+            }).join(' ');
+        }
+
+        return attributes_string;
+    }
+
+    private static getBlockName(name:string):string {
+        return 'block-' + name;
+    }
+
+    private static getElementName(name:string):string {
+        return name ? Placeholders.BLOCK + '_' + name : null;
+    }
+
+    public static TEMPLATES:Templates = {
+        'a': '<a' + Placeholders.ATTRIBUTES + ' href="#" title="">' + Placeholders.CHILDREN + '</a>',
+        'img': '<img' + Placeholders.ATTRIBUTES + ' src="" alt=""/>',
+        ANY: '<' + Placeholders.TAG + Placeholders.ATTRIBUTES + '>' + Placeholders.CHILDREN + '</' + Placeholders.TAG + '>',
+        EMPTY: Placeholders.CHILDREN
+    };
+}
+
 class Compiler implements ICompiler<string> {
 
     constructor(data:Item) {
-        this.html = Compiler.render(data).replace(/{BLOCK}_/g, '');
+        this.html = Compiler.render(data).replace(new RegExp(Placeholders.BLOCK + '_','g'), '');
     }
 
     public compile():string {
@@ -31,12 +113,16 @@ class Compiler implements ICompiler<string> {
         return Compiler.applyChildren(item_code, children_code);
     }
 
+    private static renderItem(item:Item):string {
+        return new HtmlItem(item.data).getHTML();
+    }
+
     private static applyChildren(item_code: string, children_code:string):string {
-        if(children_code && item_code !== '{CHILDREN}') {
+        if(children_code && item_code !== HtmlItem.TEMPLATES.EMPTY) {
             children_code = '\n' + children_code + '\n';
         }
 
-        return item_code.replace('{CHILDREN}', children_code);
+        return item_code.replace(Placeholders.CHILDREN, children_code);
     }
 
     private static mergeChildren(children:string[], item:Item):string {
@@ -48,7 +134,7 @@ class Compiler implements ICompiler<string> {
             }).join('\n');
 
             if (item.data.type === TYPES.BLOCK) {
-                result = result.replace(/{BLOCK}/g, item.data.name);
+                result = result.replace(new RegExp(Placeholders.BLOCK, 'g'), item.data.name);
             }
         } else {
             result = children.join('\n');
@@ -66,55 +152,7 @@ class Compiler implements ICompiler<string> {
         );
     }
 
-    private static renderItem(item:Item):string {
-        var template:string,
-            name:string,
-            attributes: Attribute[],
-            attributes_string: string;
-
-        if (item.data) {
-            attributes = item.data.attributes || [];
-            template = Compiler.TEMPLATES[item.data.tag] || Compiler.TEMPLATES['ANY'];
-            name = Compiler.compileItemName(item);
-            if(name){
-                attributes.unshift({
-                    name: 'class',
-                    value: name
-                });
-            }
-
-            attributes_string = _.map(attributes, (attribute:Attribute) => {
-                return attribute.name + '="' + attribute.value + '"';
-            }).join(' ');
-
-            return template
-                .replace('{attributes}', attributes_string ? ' ' + attributes_string : attributes_string)
-                .replace(/{tag}/g, item.data.tag || 'div');
-        } else {
-            return '{CHILDREN}';
-        }
-    }
-
-    private static compileItemName(item:Item):string {
-        var data:ItemData = item.data;
-
-        if(data.type === TYPES.BLOCK) {
-            return 'block-' + data.name;
-        } else if (data.type === TYPES.ELEMENT) {
-            if (data.name) {
-                return '{BLOCK}_' + data.name;
-            }
-        }
-
-        return null;
-    }
-
     private html:string;
-    private static TEMPLATES:_.Dictionary<string> = {
-        'a': '<a{attributes} href="#" title="">{CHILDREN}</a>',
-        'img': '<img{attributes} src="" alt=""/>',
-        'ANY': '<{tag}{attributes}>{CHILDREN}</{tag}>'
-    };
 }
 
 export = Compiler;
