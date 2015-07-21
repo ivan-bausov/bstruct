@@ -96,3 +96,5 @@ creates TABLE HTML-element with class name 'block-stats', and attributes id="mai
 ```html
 <table class="block-stats" id="main" width="300"></table>
 ```
+##Notes
+B:STRUCT is designed as a part of [Citadel front-end boilerplate](https://github.com/ivan-bausov/citadel).
