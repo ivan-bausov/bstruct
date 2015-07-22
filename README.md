@@ -37,7 +37,7 @@ is compiled into appropriate HTML and SCSS-templates:
 
 ##Usage
 
-##Watcher
+###Watcher
 Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For example, run command:
 ```
 $ bstruct --watch test.ctdl
@@ -47,7 +47,7 @@ to watch and compile test.ctdl file into test.html and test.scss files. Use **.c
 
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.
 
-##Node
+###Node
 B:STRUCT implements an interface of a compiler:
 ```javascript
 var Compiler = require('bstruct'),
