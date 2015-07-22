@@ -1,8 +1,8 @@
-#B:STRUCT
+# B:STRUCT
 
 B:STRUCT is a simple preprocessor for compiling easy to write structures into HTML and appropriate SCSS-templates. Because of syntax lack, B:STRUCT is easy to learn and use. Using B:STRUCT you get a good boilerplate for your front-end project. 
 
-##Examples
+## Examples
 
 Simple B:STRUCT structure like:
 ```
@@ -37,9 +37,9 @@ is compiled into appropriate HTML and SCSS-templates:
 }
 ```
 
-##Usage
+## Usage
 
-###Watcher
+### Watcher
 
 Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For example, run command:
 ```
@@ -50,7 +50,7 @@ to watch and compile test.ctdl file into test.html and test.scss files. Use **.c
 
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.
 
-###Node
+### Node
 
 B:STRUCT implements an interface of a compiler:
 ```javascript
@@ -62,9 +62,9 @@ console.log(compiler.getHTML());
 ```
 To get compiled code templates use getSCSS and getHTML methods of compiler instance created with B:STRUCT data string.
 
-##Syntax
+## Syntax
 
-###Declarations
+### Declarations
 
 B:STRUCT uses two main logical entities to describe page markup structure.
 **BLOCK** represents complete logical part of web-site page like header, footer, popup, sale-block and etc. **BLOCK** contains **ELEMENTS** that represent its markup (for example, logo inside header, button inside product sale block and etc.).
@@ -102,11 +102,11 @@ e:auth structure compiles into DIV HTML-element with 'header_auth' CSS-class nam
 
 **ELEMENT** declaration supports '>' and key:value syntax too.
 
-###Nesting
+### Nesting
 
 To declare nested elements use ``4-spaces length`` offsets.
 
-###Attributes
+### Attributes
 
 Use **key:value** pairs to specify attributes for your block:
 ```
@@ -118,6 +118,7 @@ creates TABLE HTML-element with class name 'block-stats', and attributes id="mai
 ```html
 <table class="block-stats" id="main" width="300"></table>
 ```
-##Notes
+
+## Notes
 
 B:STRUCT is designed as a part of [Citadel front-end boilerplate](https://github.com/ivan-bausov/citadel).
