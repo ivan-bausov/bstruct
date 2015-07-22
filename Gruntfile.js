@@ -28,7 +28,8 @@ module.exports = function (grunt) {
                             '*.t.js',
                             '*.e.js',
                             'bin/bstruct',
-                            'index.js'
+                            'index.js',
+                            'README.md'
                         ],
                         dest: 'production',
                         cwd: './'
