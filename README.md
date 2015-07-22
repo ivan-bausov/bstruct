@@ -1,7 +1,9 @@
 #B:STRUCT
+
 B:STRUCT is a simple preprocessor for compiling easy to write structures into HTML and appropriate SCSS-templates. Because of syntax lack, B:STRUCT is easy to learn and use. Using B:STRUCT you get a good boilerplate for your front-end project. 
 
 ##Examples
+
 Simple B:STRUCT structure like:
 ```
 b:header
@@ -38,6 +40,7 @@ is compiled into appropriate HTML and SCSS-templates:
 ##Usage
 
 ###Watcher
+
 Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For example, run command:
 ```
 $ bstruct --watch test.ctdl
@@ -48,6 +51,7 @@ to watch and compile test.ctdl file into test.html and test.scss files. Use **.c
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.
 
 ###Node
+
 B:STRUCT implements an interface of a compiler:
 ```javascript
 var Compiler = require('bstruct'),
@@ -61,6 +65,7 @@ To get compiled code templates use getSCSS and getHTML methods of compiler insta
 ##Syntax
 
 ###Declarations
+
 B:STRUCT uses two main logical entities to describe page markup structure.
 **BLOCK** represents complete logical part of web-site page like header, footer, popup, sale-block and etc. **BLOCK** contains **ELEMENTS** that represent its markup (for example, logo inside header, button inside product sale block and etc.).
 Every **BLOCK** must have an unique name (class name in HTML and CSS). 
@@ -98,9 +103,11 @@ e:auth structure compiles into DIV HTML-element with 'header_auth' CSS-class nam
 **ELEMENT** declaration supports '>' and key:value syntax too.
 
 ###Nesting
+
 To declare nested elements use ``4-spaces length`` offsets.
 
 ###Attributes
+
 Use **key:value** pairs to specify attributes for your block:
 ```
 b:stats>table
@@ -112,4 +119,5 @@ creates TABLE HTML-element with class name 'block-stats', and attributes id="mai
 <table class="block-stats" id="main" width="300"></table>
 ```
 ##Notes
+
 B:STRUCT is designed as a part of [Citadel front-end boilerplate](https://github.com/ivan-bausov/citadel).
