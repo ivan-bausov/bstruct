@@ -1,5 +1,5 @@
 #B:STRUCT
-B:STRUCT is a simple preprocessor for easy to write structures into HTML and appropriate SCSS-templates. Because of syntax lack, B:STRUCT is easy to learn and use. Using B:STRUCT you get a good boilerplate for your front-end project. 
+B:STRUCT is a simple preprocessor for compiling easy to write structures into HTML and appropriate SCSS-templates. Because of syntax lack, B:STRUCT is easy to learn and use. Using B:STRUCT you get a good boilerplate for your front-end project. 
 
 ##Examples
 Simple B:STRUCT structure like:
