@@ -69,7 +69,7 @@ class Compiler implements ICompiler<string> {
             if (data.name) {
                 name = (data.tag || '') + '.{BLOCK}_' + data.name;
             } else {
-                name = '& > ' + data.tag;
+                name = '& > ' + (data.tag || 'div');
             }
         } else if (data.type === TYPES.BLOCK) {
             name = '.block-' + data.name;

@@ -17,7 +17,7 @@ import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
-fdescribe('ScssCompiler', () => {
+describe('ScssCompiler', () => {
 
     test({
         description: 'root',
