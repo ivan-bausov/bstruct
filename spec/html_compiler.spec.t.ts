@@ -80,6 +80,7 @@ describe('HtmlCompiler', () => {
         result: '<img class="block-test" src="" alt=""/>'
     });
 
+    //#TODO: this case must throw an exception?
     test({
         description: 'element',
         source: {
