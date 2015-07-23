@@ -15,7 +15,7 @@ import TYPES = enums.TYPES
 class Compiler implements ICompiler<string> {
 
     constructor(data:Serialized<ItemData>) {
-        this.scss = this.renderToSCSS(data);
+        this.scss = this.renderToSCSS(data).replace(/{BLOCK}_/g, '');
     }
 
     public compile():string {

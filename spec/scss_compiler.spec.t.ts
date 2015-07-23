@@ -91,7 +91,7 @@ describe('ScssCompiler', () => {
             },
             children: []
         },
-        result: '& > custom.test {\n\n}'
+        result: 'a.test {\n\n}'
     });
 
     //test({
