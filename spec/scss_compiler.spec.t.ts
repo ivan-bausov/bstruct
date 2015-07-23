@@ -17,7 +17,7 @@ import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
-describe('ScssCompiler', () => {
+fdescribe('ScssCompiler', () => {
 
     test({
         description: 'root',
@@ -94,136 +94,41 @@ describe('ScssCompiler', () => {
         result: 'a.test {\n\n}'
     });
 
-    //test({
-    //    description: 'img element',
-    //    source: {
-    //        data: {
-    //            name: null,
-    //            type: TYPES.ELEMENT,
-    //            tag: 'img'
-    //        },
-    //        children: []
-    //    },
-    //    result: '<img src="" alt=""/>'
-    //});
-    //
-    //test({
-    //    description: 'named img element',
-    //    source: {
-    //        data: {
-    //            name: 'test',
-    //            type: TYPES.ELEMENT,
-    //            tag: 'img'
-    //        },
-    //        children: []
-    //    },
-    //    result: '<img class="test" src="" alt=""/>'
-    //});
-    //
-    //test({
-    //    description: 'named element',
-    //    source: {
-    //        data: {
-    //            name: 'test',
-    //            type: TYPES.ELEMENT,
-    //            tag: null
-    //        },
-    //        children: []
-    //    },
-    //    result: '<div class="test"></div>'
-    //});
-    //
-    //test({
-    //    description: 'attributes',
-    //    source: {
-    //        data: {
-    //            name: 'test',
-    //            type: TYPES.ELEMENT,
-    //            tag: null,
-    //            attributes: [
-    //                {
-    //                    name: 'width',
-    //                    value: '100'
-    //                },
-    //                {
-    //                    name: 'id',
-    //                    value: 'test'
-    //                }
-    //            ]
-    //        },
-    //        children: []
-    //    },
-    //    result: '<div class="test" width="100" id="test"></div>'
-    //});
-    //
-    //test({
-    //    description: 'A: attributes',
-    //    source: {
-    //        data: {
-    //            name: 'test',
-    //            type: TYPES.ELEMENT,
-    //            tag: 'a',
-    //            attributes: [
-    //                {
-    //                    name: 'width',
-    //                    value: '100'
-    //                },
-    //                {
-    //                    name: 'id',
-    //                    value: 'test'
-    //                }
-    //            ]
-    //        },
-    //        children: []
-    //    },
-    //    result: '<a class="test" width="100" id="test" href="#" title=""></a>'
-    //});
-    //
-    //test({
-    //    description: 'IMG: attributes',
-    //    source: {
-    //        data: {
-    //            name: 'test',
-    //            type: TYPES.ELEMENT,
-    //            tag: 'img',
-    //            attributes: [
-    //                {
-    //                    name: 'width',
-    //                    value: '100'
-    //                },
-    //                {
-    //                    name: 'id',
-    //                    value: 'test'
-    //                }
-    //            ]
-    //        },
-    //        children: []
-    //    },
-    //    result: '<img class="test" width="100" id="test" src="" alt=""/>'
-    //});
-    //
-    //test({
-    //    description: 'element inside block',
-    //    source: {
-    //        data: {
-    //            name: 'header',
-    //            type: TYPES.BLOCK,
-    //            tag: null
-    //        },
-    //        children: [
-    //            {
-    //                data: {
-    //                    name: null,
-    //                    type: TYPES.ELEMENT,
-    //                    tag: null
-    //                },
-    //                children: []
-    //            }
-    //        ]
-    //    },
-    //    result: '<div class="block-header">\n' + '    <div></div>\n' + '</div>'
-    //});
-    //
+    test({
+        description: 'named element',
+        source: {
+            data: {
+                name: 'test',
+                type: TYPES.ELEMENT,
+                tag: null
+            },
+            children: []
+        },
+        result: '.test {\n\n}'
+    });
+
+    test({
+        description: 'element inside block',
+        source: {
+            data: {
+                name: 'header',
+                type: TYPES.BLOCK,
+                tag: null
+            },
+            children: [
+                {
+                    data: {
+                        name: null,
+                        type: TYPES.ELEMENT,
+                        tag: null
+                    },
+                    children: []
+                }
+            ]
+        },
+        result: '.block-header {\n  & > div {\n\n  }\n}'
+    });
+
     //test({
     //    description: 'named element inside block',
     //    source: {
