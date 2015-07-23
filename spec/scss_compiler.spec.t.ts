@@ -129,111 +129,113 @@ describe('ScssCompiler', () => {
         result: '.block-header {\n  & > div {\n\n  }\n}'
     });
 
-    //test({
-    //    description: 'named element inside block',
-    //    source: {
-    //        data: {
-    //            name: 'header',
-    //            type: TYPES.BLOCK,
-    //            tag: null
-    //        },
-    //        children: [
-    //            {
-    //                data: {
-    //                    name: 'logo',
-    //                    type: TYPES.ELEMENT,
-    //                    tag: null
-    //                },
-    //                children: []
-    //            }
-    //        ]
-    //    },
-    //    result: '<div class="block-header">\n' + '    <div class="header_logo"></div>\n' + '</div>'
-    //});
-    //
-    //test({
-    //    description: 'block inside block',
-    //    source: {
-    //        data: {
-    //            name: 'header',
-    //            type: TYPES.BLOCK,
-    //            tag: null
-    //        },
-    //        children: [
-    //            {
-    //                data: {
-    //                    name: 'logo',
-    //                    type: TYPES.BLOCK,
-    //                    tag: null
-    //                },
-    //                children: []
-    //            }
-    //        ]
-    //    },
-    //    result: '<div class="block-header">\n' + '    <div class="block-logo"></div>\n' + '</div>'
-    //});
-    //
-    //test({
-    //    description: 'element inside block inside block',
-    //    source: {
-    //        data: {
-    //            name: 'header',
-    //            type: TYPES.BLOCK,
-    //            tag: null
-    //        },
-    //        children: [
-    //            {
-    //                data: {
-    //                    name: 'logo',
-    //                    type: TYPES.BLOCK,
-    //                    tag: null
-    //                },
-    //                children: [
-    //                    {
-    //                        data: {
-    //                            name: 'test',
-    //                            type: TYPES.ELEMENT,
-    //                            tag: null
-    //                        },
-    //                        children: []
-    //                    }
-    //                ]
-    //            }
-    //        ]
-    //    },
-    //    result: '<div class="block-header">\n'
-    //    + '    <div class="block-logo">\n'
-    //    + '        <div class="logo_test"></div>\n'
-    //    + '    </div>\n'
-    //    + '</div>'
-    //});
-    //
-    //test({
-    //    description: 'items inside root',
-    //    source: {
-    //        data: null,
-    //        children: [
-    //            {
-    //                data: {
-    //                    name: 'test',
-    //                    type: TYPES.ELEMENT,
-    //                    tag: null
-    //                },
-    //                children: []
-    //            },
-    //            {
-    //                data: {
-    //                    name: 'test',
-    //                    type: TYPES.BLOCK,
-    //                    tag: null
-    //                },
-    //                children: []
-    //            }
-    //        ]
-    //    },
-    //    result: '<div class="test"></div>\n' +
-    //    '<div class="block-test"></div>'
-    //});
+    test({
+        description: 'named element inside block',
+        source: {
+            data: {
+                name: 'header',
+                type: TYPES.BLOCK,
+                tag: null
+            },
+            children: [
+                {
+                    data: {
+                        name: 'logo',
+                        type: TYPES.ELEMENT,
+                        tag: null
+                    },
+                    children: []
+                }
+            ]
+        },
+        result: '.block-header {\n  .header_logo {\n\n  }\n}'
+    });
+
+    test({
+        description: 'block inside block',
+        source: {
+            data: {
+                name: 'header',
+                type: TYPES.BLOCK,
+                tag: null
+            },
+            children: [
+                {
+                    data: {
+                        name: 'logo',
+                        type: TYPES.BLOCK,
+                        tag: null
+                    },
+                    children: []
+                }
+            ]
+        },
+        result: '.block-header {\n  .block-logo {\n\n  }\n}'
+    });
+
+    test({
+        description: 'element inside block inside block',
+        source: {
+            data: {
+                name: 'header',
+                type: TYPES.BLOCK,
+                tag: null
+            },
+            children: [
+                {
+                    data: {
+                        name: 'logo',
+                        type: TYPES.BLOCK,
+                        tag: null
+                    },
+                    children: [
+                        {
+                            data: {
+                                name: 'test',
+                                type: TYPES.ELEMENT,
+                                tag: null
+                            },
+                            children: []
+                        }
+                    ]
+                }
+            ]
+        },
+        result:
+        '.block-header {\n' +
+        '  .block-logo {\n'+
+        '    .logo_test {\n' +
+        '\n' +
+        '    }\n' +
+        '  }\n' +
+        '}'
+    });
+
+    test({
+        description: 'items inside root',
+        source: {
+            data: null,
+            children: [
+                {
+                    data: {
+                        name: 'test',
+                        type: TYPES.ELEMENT,
+                        tag: null
+                    },
+                    children: []
+                },
+                {
+                    data: {
+                        name: 'test',
+                        type: TYPES.BLOCK,
+                        tag: null
+                    },
+                    children: []
+                }
+            ]
+        },
+        result: '.test {\n\n}\n\n.block-test {\n\n}'
+    });
 
     function test(options:{
         source:Serialized<ItemData>;
