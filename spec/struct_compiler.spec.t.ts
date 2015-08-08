@@ -25,7 +25,7 @@ describe('struct_compiler.getSourceStrings', () => {
 
 });
 
-fdescribe('struct_compiler.compile', () => {
+describe('struct_compiler.compile', () => {
 
     it('struct_compiler.compile', () => {
 
@@ -168,7 +168,7 @@ fdescribe('struct_compiler.compile', () => {
 
 });
 
-describe('StructCompiler.parseBlockDeclaration', () => {
+fdescribe('StructCompiler.parseBlockDeclaration', () => {
 
     test({
         source: 'b:test',
@@ -266,7 +266,7 @@ describe('StructCompiler.parseBlockDeclaration', () => {
     }
 });
 
-fdescribe('struct_compiler.parseElementDeclaration', () => {
+describe('struct_compiler.parseElementDeclaration', () => {
 
     test({
         source: 'e:',

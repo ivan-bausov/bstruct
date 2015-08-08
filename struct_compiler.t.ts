@@ -88,7 +88,7 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
     public static parseBlockDeclaration(line:string, index:number):ItemData{
         return Compiler.parseDeclaration(
             line,
-            /^\s*b\:\s*([^>\s]+)(:?\s*>\s*(\S+))?\s*$/,
+            /^\s*b\:\s*([^>^\*\s]+)(:?\s*>\s*([^\*\s]+))?\s*(:?\s*\*\s*(\d+))?\s*$/,
             TYPES.BLOCK,
             Compiler.Errors.BLOCK_DECLARATION_SYNTAX_ERROR,
             index
@@ -132,6 +132,8 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
                 name: matches[1] || null,
                 tag: matches[3] || null
             };
+
+            matches[5] && (item_data.count = parseInt(matches[5]));
         } else {
             throw Compiler.createError(
                 error_message,
