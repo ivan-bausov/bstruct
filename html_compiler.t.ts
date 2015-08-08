@@ -59,13 +59,26 @@ class HtmlItem {
      * @returns {string}
      */
     public getHTML():string {
-        var attributes_string: string;
+        var attributes_string: string,
+            item_html:string,
+            html:string;
 
         if (this.data) {
             attributes_string = this.getAttributesString();
-            return (HtmlItem.TEMPLATES[this.data.tag] || HtmlItem.TEMPLATES.ANY)
+            item_html = (HtmlItem.TEMPLATES[this.data.tag] || HtmlItem.TEMPLATES.ANY)
                 .replace(Placeholders.ATTRIBUTES, attributes_string ? ' ' + attributes_string : attributes_string)
                 .replace(new RegExp(Placeholders.TAG, 'g'), this.data.tag || 'div');
+
+            if(this.data.count) {
+                var items:string[] = [];
+                for (var i = this.data.count; i; i--) {
+                    items.push(item_html);
+                }
+
+                html = items.join('\n');
+            }
+
+            return html || item_html;
         } else {
             return HtmlItem.TEMPLATES.EMPTY;
         }
@@ -155,7 +168,7 @@ class Compiler implements ICompiler<string> {
             children_code = '\n' + children_code + '\n';
         }
 
-        return item_code.replace(Placeholders.CHILDREN, children_code);
+        return item_code.replace(new RegExp(Placeholders.CHILDREN, 'g'), children_code);
     }
 
     private static mergeChildren(children:string[], item:Item):string {

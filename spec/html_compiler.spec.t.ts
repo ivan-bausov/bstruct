@@ -369,6 +369,52 @@ describe('HtmlCompiler', () => {
         '<div class="block-test"></div>'
     });
 
+    test({
+        description: 'count',
+        source: {
+            data: null,
+            children: [
+                {
+                    data: {
+                        name: 'test',
+                        type: TYPES.BLOCK,
+                        tag: null
+                    },
+                    children: [
+                        {
+                            data: {
+                                name: 'item',
+                                type: TYPES.BLOCK,
+                                tag: null,
+                                count: 2
+                            },
+                            children: [
+                                {
+                                    data: {
+                                        name: 'name',
+                                        type: TYPES.ELEMENT,
+                                        tag: null
+                                    },
+                                    children: [
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        result:
+        '<div class="block-test">\n' +
+        '    <div class="block-item">\n' +
+        '        <div class="item_name"></div>\n' +
+        '    </div>\n' +
+        '    <div class="block-item">\n' +
+        '        <div class="item_name"></div>\n' +
+        '    </div>\n' +
+        '</div>'
+    });
+
     function test(options:{
         source:Serialized<ItemData>;
         description: string;
