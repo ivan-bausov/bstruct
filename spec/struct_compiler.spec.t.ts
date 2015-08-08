@@ -168,7 +168,7 @@ describe('struct_compiler.compile', () => {
 
 });
 
-fdescribe('StructCompiler.parseBlockDeclaration', () => {
+describe('StructCompiler.parseBlockDeclaration', () => {
 
     test({
         source: 'b:test',

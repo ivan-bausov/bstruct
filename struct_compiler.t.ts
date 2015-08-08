@@ -98,7 +98,7 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
     public static parseElementDeclaration(line:string, index:number):ItemData{
         return Compiler.parseDeclaration(
             line,
-            /^\s*e\:\s*([^>\s]+)?(:?\s*>\s*(\S+))?\s*$/,
+            /^\s*e\:\s*([^>^\*\s]+)?(:?\s*>\s*([^\*\s]+))?\s*(:?\s*\*\s*(\d+))?\s*$/,
             TYPES.ELEMENT,
             Compiler.Errors.ELEMENT_DECLARATION_SYNTAX_ERROR,
             index
