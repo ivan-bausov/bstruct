@@ -406,4 +406,25 @@ describe('Compiler.parseLevel', () => {
     }
 });
 
+describe('Placeholder support', () => {
+
+    test({
+        source: 'p:test',
+        result: {
+            type: TYPES.PLACEHOLDER,
+            name: 'test',
+            tag: null
+        }
+    });
+
+    function test(options:{
+        source:string;
+        result: ItemData;
+    }) {
+        it(options.source, () => {
+            var parse_result:ItemData = Compiler.parsePlaceholderDeclaration(options.source, 4);
+            expect(parse_result).toEqual(options.result);
+        });
+    }
+});
 

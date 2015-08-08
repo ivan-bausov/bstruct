@@ -5,5 +5,6 @@
 export var TYPES = {
     ELEMENT: 'element',
     BLOCK: 'block',
+    PLACEHOLDER: 'placeholder',
     ATTRIBUTE: 'attribute'
 };

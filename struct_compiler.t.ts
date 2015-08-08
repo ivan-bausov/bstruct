@@ -24,7 +24,8 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
     static Errors = {
         BLOCK_DECLARATION_SYNTAX_ERROR: "BLOCK declaration syntax error",
         ELEMENT_DECLARATION_SYNTAX_ERROR: "ELEMENT declaration syntax error",
-        ATTRIBUTE_DECLARATION_SYNTAX_ERROR: "ATTRIBUTE declaration syntax error"
+        ATTRIBUTE_DECLARATION_SYNTAX_ERROR: "ATTRIBUTE declaration syntax error",
+        PLACEHOLDER_DECLARATION_SYNTAX_ERROR: "PLACEHOLDER declaration syntax error"
     };
 
     constructor(data:string){
@@ -105,6 +106,16 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
         );
     }
 
+    public static parsePlaceholderDeclaration(line:string, index:number):ItemData{
+        return Compiler.parseDeclaration(
+            line,
+            /^\s*p\:\s*(\S+)?\s*$/,
+            TYPES.PLACEHOLDER,
+            Compiler.Errors.PLACEHOLDER_DECLARATION_SYNTAX_ERROR,
+            index
+        );
+    }
+
     public static parseAttributeDeclaration(line:string, index:number):Attribute {
         var matches:string[] = line.match(/^\s*(\S+)\s*\:\s*(\S+)\s*$/);
 
@@ -161,6 +172,11 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
             type: TYPES.ELEMENT,
             pattern: /^(:?\s)*e\:.+$/,
             parser: Compiler.parseElementDeclaration
+        },
+        {
+            type: TYPES.PLACEHOLDER,
+            pattern: /^(:?\s)*p\:.+$/,
+            parser: Compiler.parsePlaceholderDeclaration
         },
         {
             type: TYPES.ATTRIBUTE,
