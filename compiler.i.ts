@@ -10,7 +10,8 @@ export interface ItemData {
     type:string;
     name:string;
     tag:string;
-    attributes?: Attribute[]
+    attributes?: Attribute[];
+    count?: number;
 }
 
 export interface Attribute {

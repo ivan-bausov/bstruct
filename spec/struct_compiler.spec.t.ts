@@ -25,7 +25,7 @@ describe('struct_compiler.getSourceStrings', () => {
 
 });
 
-describe('struct_compiler.compile', () => {
+fdescribe('struct_compiler.compile', () => {
 
     it('struct_compiler.compile', () => {
 
@@ -197,6 +197,36 @@ describe('StructCompiler.parseBlockDeclaration', () => {
         }
     });
 
+    test({
+        source: 'b:test*5',
+        result: {
+            type: TYPES.BLOCK,
+            name: 'test',
+            tag: null,
+            count: 5
+        }
+    });
+
+    test({
+        source: 'b:test>a*5',
+        result: {
+            type: TYPES.BLOCK,
+            name: 'test',
+            tag: 'a',
+            count: 5
+        }
+    });
+
+    test({
+        source: 'b:   test > a   *  5',
+        result: {
+            type: TYPES.BLOCK,
+            name: 'test',
+            tag: 'a',
+            count: 5
+        }
+    });
+
     testError({
         source: 'b>test:a',
         line_number: 5,
@@ -236,7 +266,7 @@ describe('StructCompiler.parseBlockDeclaration', () => {
     }
 });
 
-describe('struct_compiler.parseElementDeclaration', () => {
+fdescribe('struct_compiler.parseElementDeclaration', () => {
 
     test({
         source: 'e:',
@@ -280,6 +310,56 @@ describe('struct_compiler.parseElementDeclaration', () => {
             type: TYPES.ELEMENT,
             name: 'test',
             tag: 'a'
+        }
+    });
+
+    test({
+        source: 'e:*5',
+        result: {
+            type: TYPES.ELEMENT,
+            name: null,
+            tag: null,
+            count: 5
+        }
+    });
+
+    test({
+        source: 'e:test*5',
+        result: {
+            type: TYPES.ELEMENT,
+            name: 'test',
+            tag: null,
+            count: 5
+        }
+    });
+
+    test({
+        source: 'e:test>a*5',
+        result: {
+            type: TYPES.ELEMENT,
+            name: 'test',
+            tag: 'a',
+            count: 5
+        }
+    });
+
+    test({
+        source: 'e:>a*5',
+        result: {
+            type: TYPES.ELEMENT,
+            name: null,
+            tag: 'a',
+            count: 5
+        }
+    });
+
+    test({
+        source: 'e:   test > a   *  5',
+        result: {
+            type: TYPES.ELEMENT,
+            name: 'test',
+            tag: 'a',
+            count: 5
         }
     });
 
