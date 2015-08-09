@@ -17,7 +17,7 @@ import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
-describe('HtmlCompiler', () => {
+fdescribe('HtmlCompiler', () => {
 
     test({
         description: 'root',
@@ -412,6 +412,57 @@ describe('HtmlCompiler', () => {
         '    <div class="block-item">\n' +
         '        <div class="item_name"></div>\n' +
         '    </div>\n' +
+        '</div>'
+    });
+
+    test({
+        description: 'placeholder',
+        source: {
+            data: null,
+            children: [
+                {
+                    data: {
+                        name: 'menu',
+                        type: TYPES.BLOCK,
+                        tag: null
+                    },
+                    children: [
+                        {
+                            data: {
+                                name: 'tabs',
+                                type: TYPES.PLACEHOLDER,
+                                tag: null
+                            },
+                            children: [
+                                {
+                                    data: {
+                                        name: 'tab',
+                                        type: TYPES.BLOCK,
+                                        tag: null
+                                    },
+                                    children: [
+                                        {
+                                            data: {
+                                                name: 'tab',
+                                                type: TYPES.PLACEHOLDER,
+                                                tag: null
+                                            },
+                                            children: []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        result: '<div class="block-menu">\n' +
+        '    {{#tabs}}\n' +
+        '        <div class="block-tab">\n' +
+        '            {{tab}}\n' +
+        '        </div>\n' +
+        '    {{/tabs}}\n' +
         '</div>'
     });
 
