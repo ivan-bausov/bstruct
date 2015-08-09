@@ -15,10 +15,16 @@ import TYPES = enums.TYPES
 
 interface Item extends Serialized<ItemData>{}
 
-interface Templates extends _.Dictionary<string> {
+interface HtmlTemplates extends _.Dictionary<string> {
     ANY:string;
     EMPTY:string;
 }
+
+interface PlaceholderTemplates extends _.Dictionary<string> {
+    PLACEHOLDER_WRAPPER:string;
+    PLACEHOLDER:string;
+}
+
 
 /**
  * Placeholders used in templates;
@@ -134,11 +140,42 @@ class HtmlItem {
      * HTML tag templates
      * @type {{a: string, img: string, ANY: string, EMPTY: string}}
      */
-    public static TEMPLATES:Templates = {
+    public static TEMPLATES:HtmlTemplates = {
         'a': '<a' + Placeholders.ATTRIBUTES + ' href="#" title="">' + Placeholders.CHILDREN + '</a>',
         'img': '<img' + Placeholders.ATTRIBUTES + ' src="" alt=""/>',
         ANY: '<' + Placeholders.TAG + Placeholders.ATTRIBUTES + '>' + Placeholders.CHILDREN + '</' + Placeholders.TAG + '>',
         EMPTY: Placeholders.CHILDREN
+    };
+}
+
+class PlaceholderItem {
+    constructor(private item:Serialized<ItemData>) {
+    }
+
+    /**
+     * returns item HTML
+     * @returns {string}
+     */
+    public getHTML():string {
+        var item_html:string;
+
+        item_html = (
+            this.item.children.length ?
+                PlaceholderItem.TEMPLATES.PLACEHOLDER_WRAPPER :
+                PlaceholderItem.TEMPLATES.PLACEHOLDER
+        )
+            .replace(new RegExp(Placeholders.TAG, 'g'), this.item.data.name);
+
+        return item_html;
+    }
+
+    /**
+     * HTML tag templates
+     * @type {{a: string, img: string, ANY: string, EMPTY: string}}
+     */
+    public static TEMPLATES:PlaceholderTemplates = {
+        PLACEHOLDER_WRAPPER: '{{#' + Placeholders.TAG + '}}' + Placeholders.CHILDREN + '{{/' + Placeholders.TAG + '}}',
+        PLACEHOLDER: '{{' + Placeholders.TAG + '}}'
     };
 }
 
@@ -160,7 +197,11 @@ class Compiler implements ICompiler<string> {
     }
 
     private static renderItem(item:Item):string {
-        return new HtmlItem(item.data).getHTML();
+        if (item.data && item.data.type === TYPES.PLACEHOLDER) {
+            return new PlaceholderItem(item).getHTML();
+        } else {
+            return new HtmlItem(item.data).getHTML();
+        }
     }
 
     private static applyChildren(item_code: string, children_code:string):string {

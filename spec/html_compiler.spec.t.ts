@@ -17,7 +17,7 @@ import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
-fdescribe('HtmlCompiler', () => {
+describe('HtmlCompiler', () => {
 
     test({
         description: 'root',
