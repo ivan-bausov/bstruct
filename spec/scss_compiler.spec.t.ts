@@ -237,6 +237,62 @@ describe('ScssCompiler', () => {
         result: '.test {\n\n}\n\n.block-test {\n\n}'
     });
 
+    test({
+        description: 'placeholder',
+        source: {
+            data: {
+                name: 'header',
+                type: TYPES.BLOCK,
+                tag: null
+            },
+            children: [
+                {
+                    data: {
+                        name: 'placeholder',
+                        type: TYPES.PLACEHOLDER,
+                        tag: null
+                    },
+                    children: [
+                        {
+                            data: {
+                                name: 'test',
+                                type: TYPES.ELEMENT,
+                                tag: null
+                            },
+                            children: [
+                                {
+                                    data: {
+                                        name: 'test',
+                                        type: TYPES.PLACEHOLDER,
+                                        tag: null
+                                    },
+                                    children: [
+                                        {
+                                            data: {
+                                                name: 'logo',
+                                                type: TYPES.ELEMENT,
+                                                tag: null
+                                            },
+                                            children: []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        result: '.block-header {\n' +
+        '  .header_test {\n' +
+        '    .header_logo {\n' +
+        '\n' +
+        '    }\n' +
+        '  }\n' +
+        '}'
+    });
+
+
     function test(options:{
         source:Serialized<ItemData>;
         description: string;

@@ -33,9 +33,13 @@ class Compiler implements ICompiler<string> {
         });
 
         if (item.data) {
-            children_scss_string = _.map(children_scss.join('\n').split('\n'), (str:string) => {
-                return str && ('  ' + str);
-            }).join('\n');
+            if(item.data.type === TYPES.PLACEHOLDER) {
+                children_scss_string = children_scss.join('\n\n');
+            } else {
+                children_scss_string = _.map(children_scss.join('\n').split('\n'), (str:string) => {
+                    return str && ('  ' + str);
+                }).join('\n');
+            }
         } else {
             children_scss_string = children_scss.join('\n\n');
         }
@@ -52,7 +56,13 @@ class Compiler implements ICompiler<string> {
             name:string;
 
         if (item.data) {
-            template = '{name} {\n{CHILDREN}\n}';
+
+            if(item.data.type === TYPES.PLACEHOLDER) {
+                template = '{CHILDREN}';
+            } else {
+                template = '{name} {\n{CHILDREN}\n}';
+            }
+
             name = Compiler.compileElementName(item);
 
             return template.replace('{name}', name);
