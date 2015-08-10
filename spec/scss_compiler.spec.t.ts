@@ -54,19 +54,18 @@ describe('ScssCompiler', () => {
         result: '.block-test {\n\n}'
     });
 
-    //#TODO: this case must throw an exception?
-    //test({
-    //    description: 'element',
-    //    source: {
-    //        data: {
-    //            name: null,
-    //            type: TYPES.ELEMENT,
-    //            tag: null
-    //        },
-    //        children: []
-    //    },
-    //    result: ''
-    //});
+    test({
+        description: 'element',
+        source: {
+            data: {
+                name: null,
+                type: TYPES.ELEMENT,
+                tag: null
+            },
+            children: []
+        },
+        result: '& > div {\n\n}'
+    });
 
     test({
         description: 'custom element',
