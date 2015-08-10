@@ -78,6 +78,10 @@ to declare block with name 'header' ('block-header' class name in markup).
 ```html
 <div class="block-header"></div>
 ```
+```scss
+.block-header {
+
+}
 
 Use **'>'** operand to specify HTML-tag to use in markup for your block:
 ```
@@ -86,6 +90,11 @@ b:header>ul
 creates UL HTML-element with 'block-header' class name.
 ```html
 <ul class="block-header"></ul>
+```
+```scss
+.block-header {
+
+}
 ```
 
 **ELEMENT** must have an unique name inside its block. To provide element name uniqueness inside whole web-page B:STRUCT preprocessor prepends ELEMENT name with its parent block name. For example:
@@ -98,6 +107,13 @@ e:auth structure compiles into DIV HTML-element with 'header_auth' CSS-class nam
 <div class="block-header">
     <div class="header_auth"></div>
 </div>
+```
+```scss
+.block-header {
+    .header_auth {
+    
+    }
+}
 ```
 
 **ELEMENT** declaration supports '>' and key:value syntax too.
@@ -118,6 +134,41 @@ creates TABLE HTML-element with class name 'block-stats', and attributes id="mai
 ```html
 <table class="block-stats" id="main" width="300"></table>
 ```
+Attributes statements are ignored by SCSS-compiler.
+
+### Collections
+
+To generate set of elements in HTML, use multiplication operator to specify elements count. 
+```
+e:item>li*3
+```
+```html
+<li class="item"></li>
+<li class="item"></li>
+<li class="item"></li>
+```
+Count statements are ignored by SCSS compiler.
+
+### Placeholders
+
+Use **p:value** declaration to add Mustache like placeholders into your generated HTML.
+```
+b:list
+    p:items
+        e:item
+        p:name
+```
+generates into following Mustache template
+```html
+<div class="block-list">
+    {{#items}}
+        <div class="list_item">
+            {{#name}}
+        </div>
+    {{/items}}
+</div>
+```
+**p:value** statements are ignored by SCSS compiler.
 
 ## Notes
 
