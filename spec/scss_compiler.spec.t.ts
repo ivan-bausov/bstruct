@@ -152,6 +152,28 @@ describe('ScssCompiler', () => {
     });
 
     test({
+        description: 'named element inside block',
+        source: {
+            data: {
+                name: 'header',
+                type: TYPES.BLOCK,
+                tag: null
+            },
+            children: [
+                {
+                    data: {
+                        name: 'logo',
+                        type: TYPES.ELEMENT,
+                        tag: 'a'
+                    },
+                    children: []
+                }
+            ]
+        },
+        result: '.block-header {\n  a.header_logo {\n\n  }\n}'
+    });
+
+    test({
         description: 'block inside block',
         source: {
             data: {
