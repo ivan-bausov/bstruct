@@ -82,6 +82,7 @@ to declare block with name 'header' ('block-header' class name in markup).
 .block-header {
 
 }
+```
 
 Use **'>'** operand to specify HTML-tag to use in markup for your block:
 ```
