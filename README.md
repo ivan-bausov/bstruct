@@ -169,7 +169,7 @@ generates into following Mustache template
     {{/items}}
 </div>
 ```
-**p:value** statements are ignored by SCSS compiler.
+**p:value** statements are ignored by SCSS-compiler.
 
 ## Notes
 
