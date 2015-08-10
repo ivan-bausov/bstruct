@@ -170,7 +170,7 @@ class Compiler implements ICompiler<Serialized<ItemData>> {
         },
         {
             type: TYPES.ELEMENT,
-            pattern: /^(:?\s)*e\:.+$/,
+            pattern: /^(:?\s)*e\:.*$/,
             parser: Compiler.parseElementDeclaration
         },
         {
