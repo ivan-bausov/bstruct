@@ -2,7 +2,8 @@
 /**
  * Created by Ivan on 20/07/15.
  */
-var fs = require('fs'),
+var _ = require('underscore'),
+    fs = require('fs'),
     Compiler = require('../compiler.t.js');
 
 function readContent(path) {
@@ -27,21 +28,56 @@ function processQueue() {
 
         var content = readContent(current_folder_path + target_file),
             compiler,
+            name,
             html,
             scss;
 
         try {
             compiler = new Compiler(content);
-            html = compiler.getHTML();
-            scss = compiler.getSCSS();
 
-            fs.writeFileSync(current_folder_path + target_file.replace(/\.bstruct$/, '.html'), html);
-            fs.writeFileSync(current_folder_path + target_file.replace(/\.bstruct$/, '.scss'), scss);
+            if (process.argv[4] === "--blocks") {
 
-            console.log('Change processed:');
-            console.log('Files written:');
-            console.log('\t' + current_folder_path + target_file.replace(/\.bstruct$/, '.html'));
-            console.log('\t' + current_folder_path + target_file.replace(/\.bstruct$/, '.scss'));
+                try {
+                    rmdir(current_folder_path + 'templates/');
+                    rmdir(current_folder_path + 'scss/');
+                } catch (e) {
+                    console.log(e);
+                }
+
+                try {
+                    fs.mkdirSync(current_folder_path + 'templates/');
+                    fs.mkdirSync(current_folder_path + 'scss/');
+                } catch (e) {
+                    console.log(e);
+                }
+
+                var blocks = compiler.getBlocks();
+
+                _.each(blocks, function (block) {
+                    html = block.getHTML();
+                    scss = block.getSCSS();
+                    name = block.getName();
+
+                    fs.writeFileSync(current_folder_path + 'templates/' + name + '.mustache', html);
+                    fs.writeFileSync(current_folder_path + 'scss/_' + name + '.scss', scss);
+
+                    console.log('Change processed:');
+                    console.log('Files written:');
+                    console.log('\t' + current_folder_path + 'templates/' + name + '.mustache');
+                    console.log('\t' + current_folder_path + 'templates/' + name + '.scss');
+                })
+            } else {
+                html = compiler.getHTML();
+                scss = compiler.getSCSS();
+
+                fs.writeFileSync(current_folder_path + target_file.replace(/\.bstruct$/, '.html'), html);
+                fs.writeFileSync(current_folder_path + target_file.replace(/\.bstruct$/, '.scss'), scss);
+
+                console.log('Change processed:');
+                console.log('Files written:');
+                console.log('\t' + current_folder_path + target_file.replace(/\.bstruct$/, '.html'));
+                console.log('\t' + current_folder_path + target_file.replace(/\.bstruct$/, '.scss'));
+            }
 
         } catch (e) {
             console.log(e);
@@ -72,4 +108,15 @@ if (process.argv[2] === '--watch') {
         processQueue();
     }
 }
+
+function rmdir (path) {
+    var files = [];
+    if (fs.existsSync(path)) {
+        files = fs.readdirSync(path);
+        files.forEach(function (file) {
+            fs.unlinkSync(path + "/" + file);
+        });
+        fs.rmdirSync(path);
+    }
+};
 
