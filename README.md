@@ -42,10 +42,10 @@ is compiled into appropriate HTML and SCSS-templates:
 ### Watcher
 
 Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For example, run command:
-```
+```.
 $ bstruct --watch test.ctdl
 ```
-to watch and compile test.ctdl file into test.html and test.scss files. Use **.ctdl** extension for your B:STRUCT files to compile.
+to watch and compile test.ctdl file into test.html and test.scss files. Use **.bstruct** extension for your B:STRUCT files to compile.
 **Note!** The executable bin file for B:STRUCT watcher is placed in **bin** folder of bstruct node module directory. If **bstruct** command does not work after the installation by default, try to add this directory to your PATH or create a symlink inside your bin folder.
 
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.

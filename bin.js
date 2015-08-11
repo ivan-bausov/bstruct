@@ -35,13 +35,13 @@ function processQueue() {
             html = compiler.getHTML();
             scss = compiler.getSCSS();
 
-            fs.writeFileSync(current_folder_path + target_file.replace(/\.ctdl$/, '.html'), html);
-            fs.writeFileSync(current_folder_path + target_file.replace(/\.ctdl$/, '.scss'), scss);
+            fs.writeFileSync(current_folder_path + target_file.replace(/\.bstruct$/, '.html'), html);
+            fs.writeFileSync(current_folder_path + target_file.replace(/\.bstruct$/, '.scss'), scss);
 
             console.log('Change processed:');
             console.log('Files written:');
-            console.log('\t' + current_folder_path + target_file.replace(/\.ctdl$/, '.html'));
-            console.log('\t' + current_folder_path + target_file.replace(/\.ctdl$/, '.scss'));
+            console.log('\t' + current_folder_path + target_file.replace(/\.bstruct$/, '.html'));
+            console.log('\t' + current_folder_path + target_file.replace(/\.bstruct$/, '.scss'));
 
         } catch (e) {
             console.log(e);
