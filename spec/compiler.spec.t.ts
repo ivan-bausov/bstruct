@@ -42,3 +42,26 @@ describe('compiler.getSCSS', () => {
 
 });
 
+describe('compiler.getBlocks', () => {
+
+    it('compiler.getBlocks', () => {
+        var compiler = new Compiler(
+                'b:header\n' +
+                'b:page\n' +
+                'e:test\n' +
+                'b:footer\n'
+            ),
+            result = compiler.getBlocks();
+
+        expect(result.length).toBe(3);
+        expect(result[2].getName()).toBe('block-footer');
+        expect(result[2].getSCSS()).toBe(
+            '.block-footer {\n' +
+            '\n' +
+            '}'
+        );
+        expect(result[2].getHTML()).toBe('<div class="block-footer"></div>');
+    });
+
+});
+
