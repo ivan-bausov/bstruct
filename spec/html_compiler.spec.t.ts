@@ -17,7 +17,7 @@ import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
-fdescribe('HtmlCompiler', () => {
+describe('HtmlCompiler', () => {
 
     test({
         description: 'root',
@@ -215,7 +215,7 @@ fdescribe('HtmlCompiler', () => {
             },
             children: []
         },
-        result: '<a class="test" width="100" id="test" href="#" title=""></a>'
+        result: '<a class="test" href="#" title="" width="100" id="test"></a>'
     });
 
     test({
@@ -265,7 +265,7 @@ fdescribe('HtmlCompiler', () => {
             },
             children: []
         },
-        result: '<img class="test" width="100" id="test" src="" alt=""/>'
+        result: '<img class="test" src="" alt="" width="100" id="test"/>'
     });
 
     test({

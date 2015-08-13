@@ -15,9 +15,14 @@ import TYPES = enums.TYPES
 
 interface Item extends Serialized<ItemData>{}
 
-interface HtmlTemplates extends _.Dictionary<string> {
-    ANY:string;
-    EMPTY:string;
+interface HtmlTemplate {
+    template:string;
+    attributes?: Attribute[]
+}
+
+interface HtmlTemplates extends _.Dictionary<HtmlTemplate> {
+    ANY:HtmlTemplate;
+    EMPTY:HtmlTemplate;
 }
 
 interface PlaceholderTemplates extends _.Dictionary<string> {
@@ -43,6 +48,14 @@ class HtmlItem {
     constructor(private data:ItemData) {
     }
 
+    static isAttributeMultivalued(name:string) {
+        var multivalued_attributes:_.Dictionary<boolean> = {
+            'class': true
+        };
+
+        return !!multivalued_attributes[name];
+    }
+
     /**
      * returns item name according to its type
      * @returns {string}
@@ -66,12 +79,14 @@ class HtmlItem {
      */
     public getHTML():string {
         var attributes_string: string,
+            item_template:HtmlTemplate,
             item_html:string,
             html:string;
 
         if (this.data) {
-            attributes_string = this.getAttributesString();
-            item_html = (HtmlItem.TEMPLATES[this.data.tag] || HtmlItem.TEMPLATES.ANY)
+            item_template = HtmlItem.TEMPLATES[this.data.tag] || HtmlItem.TEMPLATES.ANY;
+            attributes_string = this.getAttributesString(item_template);
+            item_html = item_template.template
                 .replace(Placeholders.ATTRIBUTES, attributes_string ? ' ' + attributes_string : attributes_string)
                 .replace(new RegExp(Placeholders.TAG, 'g'), this.data.tag || 'div');
 
@@ -86,7 +101,7 @@ class HtmlItem {
 
             return html || item_html;
         } else {
-            return HtmlItem.TEMPLATES.EMPTY;
+            return HtmlItem.TEMPLATES.EMPTY.template;
         }
     }
 
@@ -94,13 +109,14 @@ class HtmlItem {
      * Calculates item html attributes string
      * @returns {string}
      */
-    public getAttributesString():string {
-        var attributes_string:string = '',
+    public getAttributesString(template:HtmlTemplate):string {
+        var attributes_string:string,
             data:ItemData = this.data,
-            attributes:Attribute[];
+            attributes:Attribute[] = template.attributes || [],
+            attributes_value_dictionary:_.Dictionary<string> = {};
 
         if(data) {
-            attributes = data.attributes || [];
+            attributes = _.union(attributes, data.attributes || []);
 
             name = this.getName();
             if(name){
@@ -110,10 +126,26 @@ class HtmlItem {
                 });
             }
 
-            attributes_string = _.map(attributes, (attribute:Attribute) => {
-                return attribute.name + '="' + attribute.value + '"';
-            }).join(' ');
+            _.each(attributes, (attribute:Attribute) => {
+                attributes_value_dictionary[attribute.name] = attributes_value_dictionary[attribute.name] && HtmlItem.isAttributeMultivalued(attribute.name) ?
+                attributes_value_dictionary[attribute.name] + ' ' + attribute.value :
+                    attribute.value;
+            });
+
+            attributes = [];
+
+            _.each(attributes_value_dictionary, (value:string, name:string) => {
+                attributes.push({
+                    name: name,
+                    value: value
+                });
+            });
+
         }
+
+        attributes_string = _.map(attributes, (attribute:Attribute) => {
+            return attribute.name + '="' + attribute.value + '"';
+        }).join(' ') || '';
 
         return attributes_string;
     }
@@ -141,10 +173,38 @@ class HtmlItem {
      * @type {{a: string, img: string, ANY: string, EMPTY: string}}
      */
     public static TEMPLATES:HtmlTemplates = {
-        'a': '<a' + Placeholders.ATTRIBUTES + ' href="#" title="">' + Placeholders.CHILDREN + '</a>',
-        'img': '<img' + Placeholders.ATTRIBUTES + ' src="" alt=""/>',
-        ANY: '<' + Placeholders.TAG + Placeholders.ATTRIBUTES + '>' + Placeholders.CHILDREN + '</' + Placeholders.TAG + '>',
-        EMPTY: Placeholders.CHILDREN
+        'a': {
+            template: '<a' + Placeholders.ATTRIBUTES + '>' + Placeholders.CHILDREN + '</a>',
+            attributes: [
+                {
+                    name: 'href',
+                    value: '#'
+                },
+                {
+                    name: 'title',
+                    value: ''
+                }
+            ]
+        },
+        'img': {
+            template: '<img' + Placeholders.ATTRIBUTES + '/>',
+            attributes: [
+                {
+                    name: 'src',
+                    value: ''
+                },
+                {
+                    name: 'alt',
+                    value: ''
+                }
+            ]
+        },
+        ANY: {
+            template: '<' + Placeholders.TAG + Placeholders.ATTRIBUTES + '>' + Placeholders.CHILDREN + '</' + Placeholders.TAG + '>'
+        },
+        EMPTY: {
+            template: Placeholders.CHILDREN
+        }
     };
 }
 
@@ -205,7 +265,7 @@ class Compiler implements ICompiler<string> {
     }
 
     private static applyChildren(item_code: string, children_code:string):string {
-        if(children_code && item_code !== HtmlItem.TEMPLATES.EMPTY) {
+        if (children_code && item_code !== HtmlItem.TEMPLATES.EMPTY.template) {
             children_code = '\n' + children_code + '\n';
         }
 
