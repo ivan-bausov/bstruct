@@ -17,7 +17,7 @@ import TYPES = enums.TYPES;
 
 var readContent = Helpers.readContent;
 
-describe('HtmlCompiler', () => {
+fdescribe('HtmlCompiler', () => {
 
     test({
         description: 'root',
@@ -219,6 +219,33 @@ describe('HtmlCompiler', () => {
     });
 
     test({
+        description: 'A: attributes',
+        source: {
+            data: {
+                name: 'test',
+                type: TYPES.ELEMENT,
+                tag: 'a',
+                attributes: [
+                    {
+                        name: 'class',
+                        value: 'button'
+                    },
+                    {
+                        name: 'href',
+                        value: 'http://bstruct.org/'
+                    },
+                    {
+                        name: 'title',
+                        value: 'how attributes work'
+                    }
+                ]
+            },
+            children: []
+        },
+        result: '<a class="test button" href="http://bstruct.org/" title="how attributes work"></a>'
+    });
+
+    test({
         description: 'IMG: attributes',
         source: {
             data: {
@@ -240,6 +267,30 @@ describe('HtmlCompiler', () => {
         },
         result: '<img class="test" width="100" id="test" src="" alt=""/>'
     });
+
+    test({
+        description: 'IMG: attributes',
+        source: {
+            data: {
+                name: 'test',
+                type: TYPES.ELEMENT,
+                tag: 'img',
+                attributes: [
+                    {
+                        name: 'src',
+                        value: '{{src}}'
+                    },
+                    {
+                        name: 'alt',
+                        value: '{{alt}}'
+                    }
+                ]
+            },
+            children: []
+        },
+        result: '<img class="test" src="{{src}}" alt="{{alt}}"/>'
+    });
+
 
     test({
         description: 'element inside block',
