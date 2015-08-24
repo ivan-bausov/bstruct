@@ -1,7 +1,7 @@
 {
   "name": "bstruct",
-  "version": "0.1.1-beta",
-  "description": "Compile easy to write B:STRUCT schemas into HTML and SCSS templates.",
+  "version": "0.2.0-beta",
+  "description": "Compile easy to write B:STRUCT schemas into HTML, Mustache and SCSS templates.",
   "keywords": ["HTML", "SCSS", "generator", "Mustache"],
   "bin": "./bin/bstruct",
   "author": "Ivan Bausov",
