@@ -41,14 +41,37 @@ is compiled into appropriate HTML and SCSS-templates:
 
 ### Watcher
 
-Use B:STRUCT watcher to compile **.ctdl** text files into HTML and SCSS. For example, run command:
+Use B:STRUCT watcher to compile **.bstruct** text files into HTML and SCSS. For example, run command:
 ```.
-$ bstruct --watch test.ctdl
+$ bstruct --watch test.bstruct
 ```
 to watch and compile test.ctdl file into test.html and test.scss files. Use **.bstruct** extension for your B:STRUCT files to compile.
 **Note!** The executable bin file for B:STRUCT watcher is placed in **bin** folder of bstruct node module directory. If **bstruct** command does not work after the installation by default, try to add this directory to your PATH or create a symlink inside your bin folder.
 
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.
+
+B:STRUCT supports separate block compilation. Execution of
+```.
+$ bstruct --watch test.bstruct --blocks
+```
+will run B:STRUCT watcher in the blocks compilation mode. Code for every block defined in bstruct-schema will be saved in the separate files by the following rule:
+ ```
+ /templates/<file-name-watched>/mustache/<block-name>.mustache
+ /templates/<file-name-watched>/scss/_<block-name>.scss
+ ```
+ For example, running watch task with ***--blocks*** flag for the ***test.bstruct*** file with the content
+ ```
+ b:header
+ b:footer
+ ```
+ will create 4 files:
+  ```
+  /templates/test/mustache/block-header.mustache
+  /templates/test/scss/_block-header.scss
+  /templates/test/mustache/block-footer.mustache
+  /templates/test/scss/_block-footer.scss
+  ```
+ This files can be used as mustache templates and SCSS import files.
 
 ### Node
 
@@ -136,6 +159,15 @@ creates TABLE HTML-element with class name 'block-stats', and attributes id="mai
 <table class="block-stats" id="main" width="300"></table>
 ```
 Attributes statements are ignored by SCSS-compiler.
+If an attribute defined in bstruct-schema is already used in appropriate HTML tag template, its value will be merged with value used in the template. For example,
+```
+b:stats
+    class:inverted
+```
+will be compiled into 
+```html
+<div class="block-stats inverted"></div>
+```
 
 ### Collections
 
@@ -164,7 +196,7 @@ generates into following Mustache template
 <div class="block-list">
     {{#items}}
         <div class="list_item">
-            {{#name}}
+            {{name}}
         </div>
     {{/items}}
 </div>
