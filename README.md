@@ -50,7 +50,7 @@ to watch and compile test.ctdl file into test.html and test.scss files. Use **.b
 
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.
 
-B:STRUCT supports separate block compilation. Execution of
+B:STRUCT supports separate blocks compilation. Execution of
 ```.
 $ bstruct --watch test.bstruct --blocks
 ```
@@ -71,7 +71,7 @@ will run B:STRUCT watcher in the blocks compilation mode. Code for every block d
   /templates/test/mustache/block-footer.mustache
   /templates/test/scss/_block-footer.scss
   ```
- This files can be used as mustache templates and SCSS import files.
+ These files can be used as mustache templates and SCSS import files.
 
 ### Node
 
