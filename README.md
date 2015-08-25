@@ -48,7 +48,7 @@ Use B:STRUCT watcher to compile **.bstruct** text files into HTML and SCSS. For 
 $ bstruct --watch test.bstruct
 ```
 to watch and compile test.ctdl file into test.html and test.scss files. Use **.bstruct** extension for your B:STRUCT files to compile.
-**Note!** The executable bin file for B:STRUCT watcher is placed in **bin** folder of bstruct node module directory. If **bstruct** command does not work after the installation by default, try to add this directory to your PATH or create a symlink inside your bin folder.
+**Note!** The executable bin file for B:STRUCT watcher is placed in **bin** folder of bstruct node module directory. If **bstruct** command does not work after the installation by default, you can try install bstruct globally or try to add this directory to your PATH (recommended) or create a symlink inside your bin folder.
 
 Inside the B:STRUCT repo you can build production version by executing ``$ grunt build`` task. Watcher executable will be placed into production/bin directory.
 
@@ -58,8 +58,8 @@ $ bstruct --watch test.bstruct --blocks
 ```
 will run B:STRUCT watcher in the blocks compilation mode. Code for every block defined in bstruct-schema will be saved in the separate files by the following rule:
  ```
- /templates/<file-name-watched>/mustache/<block-name>.mustache
- /templates/<file-name-watched>/scss/_<block-name>.scss
+ /templates/<file-name-watched>/<block-name>.mustache
+ /scss/<file-name-watched>/_<block-name>.scss
  ```
  For example, running watch task with ***--blocks*** flag for the ***test.bstruct*** file with the content
  ```
@@ -68,10 +68,10 @@ will run B:STRUCT watcher in the blocks compilation mode. Code for every block d
  ```
  will create 4 files:
   ```
-  /templates/test/mustache/block-header.mustache
-  /templates/test/scss/_block-header.scss
-  /templates/test/mustache/block-footer.mustache
-  /templates/test/scss/_block-footer.scss
+  /templates/test/block-header.mustache
+  /scss/test/_block-header.scss
+  /templates/test/block-footer.mustache
+  /scss/test/_block-footer.scss
   ```
  These files can be used as mustache templates and SCSS import files.
 
