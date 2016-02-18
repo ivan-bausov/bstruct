@@ -5,16 +5,10 @@
 /// <reference path="../definitions/node-0.10.d.ts" />
 
 import fs = require('fs');
-import interfaces = require('../compiler.i');
-import Compiler = require('../struct_compiler.t');
-import enums = require('../compiler.e');
-import Helpers = require('./helpers.t');
-
-import ItemData = interfaces.ItemData;
-import IItem = interfaces.IItem;
-import TYPES = enums.TYPES;
-
-var readContent = Helpers.readContent;
+import {ItemData} from '../compiler.i';
+import Compiler from '../struct_compiler.t';
+import {TYPES} from '../compiler.e';
+import {readContent} from './helpers.t';
 
 describe('struct_compiler.getSourceStrings', () => {
 

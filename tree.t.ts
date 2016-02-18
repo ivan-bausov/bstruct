@@ -3,10 +3,10 @@
  * A part of B:STRUCT package <https://github.com/ivan-bausov/bstruct>
  */
 import _ = require('underscore');
-import interfaces = require('./compiler.i');
-
-import ILeaf = interfaces.IItem;
-import Serialized = interfaces.Serialized;
+import {
+    IItem as ILeaf,
+    Serialized
+} from './compiler.i';
 
 class Item<T> implements ILeaf<T>{
     constructor(private parent: Item<T>, private data:T) {
@@ -42,7 +42,7 @@ class Item<T> implements ILeaf<T>{
     private childs:Item<T>[] = [];
 }
 
-class Tree<T> {
+export default class Tree<T> {
     constructor() {
         this.current_leaf = this.root;
     }
@@ -83,5 +83,3 @@ class Tree<T> {
     private current_leaf: Item<T>;
     private root: Item<T> = new Item<T>(null, null);
 }
-
-export = Tree;

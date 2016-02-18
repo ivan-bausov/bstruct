@@ -5,15 +5,12 @@
 /// <reference path="../definitions/node-0.10.d.ts" />
 
 import fs = require('fs');
-import interfaces = require('../compiler.i');
-import enums = require('../compiler.e');
+import {
+    ItemData,
+    Serialized
+} from '../compiler.i';
+import {TYPES} from '../compiler.e';
 import Compiler from '../less_compiler.t';
-import Helpers = require('./helpers.t');
-
-import ItemData = interfaces.ItemData;
-import IItem = interfaces.IItem;
-import Serialized = interfaces.Serialized;
-import TYPES = enums.TYPES;
 
 describe('LessCompiler', () => {
 

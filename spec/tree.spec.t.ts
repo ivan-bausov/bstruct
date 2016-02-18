@@ -4,11 +4,7 @@
 /// <reference path="../definitions/jasmine.d.ts" />
 /// <reference path="../definitions/node-0.10.d.ts" />
 
-import interfaces = require('../compiler.i');
-import Tree = require('../tree.t');
-
-import ItemData = interfaces.ItemData;
-import IItem = interfaces.IItem;
+import Tree from '../tree.t';
 
 describe('Tree', () => {
 

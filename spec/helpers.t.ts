@@ -5,12 +5,8 @@
 
 import fs = require('fs');
 
-class Helpers {
-    public static readContent(path:string) {
-        return fs.readFileSync(__dirname + path, {
-            encoding: 'utf8'
-        });
-    }
+export function readContent(path:string) {
+    return fs.readFileSync(__dirname + path, {
+        encoding: 'utf8'
+    });
 }
-
-export = Helpers;

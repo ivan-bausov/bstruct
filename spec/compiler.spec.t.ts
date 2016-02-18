@@ -5,15 +5,8 @@
 /// <reference path="../definitions/node-0.10.d.ts" />
 
 import fs = require('fs');
-import interfaces = require('../compiler.i');
-import Compiler = require('../compiler.t');
-import Helpers = require('./helpers.t');
-
-import ItemData = interfaces.ItemData;
-import IItem = interfaces.IItem;
-
-var readContent = Helpers.readContent;
-
+import Compiler from '../compiler.t';
+import {readContent} from './helpers.t';
 
 describe('compiler.getHTML', () => {
     it('compiler.getHTML', () => {

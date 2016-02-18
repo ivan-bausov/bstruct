@@ -8,15 +8,11 @@
 /// <reference path="./definitions/underscore.d.ts" />
 
 import _ = require('underscore');
-import interfaces = require('./compiler.i');
-import enums = require('./compiler.e');
-import StructCompiler = require('./struct_compiler.t');
-import ScssCompiler = require('./scss_compiler.t');
-import HtmlCompiler = require('./html_compiler.t');
-
-import ItemData = interfaces.ItemData;
-import Serialized = interfaces.Serialized;
-import TYPES = enums.TYPES;
+import {ItemData, Serialized} from './compiler.i';
+import {TYPES} from './compiler.e';
+import StructCompiler from './struct_compiler.t';
+import ScssCompiler from './scss_compiler.t';
+import HtmlCompiler from './html_compiler.t';
 
 class Block {
     constructor(private source_object: Serialized<ItemData>) {
@@ -35,7 +31,7 @@ class Block {
     }
 }
 
-class Compiler {
+export default class Compiler {
 
     static ITEM_TYPE = TYPES;
 
@@ -63,5 +59,3 @@ class Compiler {
 
     private source_object: Serialized<ItemData>;
 }
-
-export = Compiler;

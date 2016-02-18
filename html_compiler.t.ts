@@ -4,14 +4,13 @@
  */
 
 import _ = require('underscore');
-import interfaces = require('./compiler.i');
-import enums = require('./compiler.e');
-
-import ICompiler = interfaces.ICompiler;
-import ItemData = interfaces.ItemData;
-import Attribute = interfaces.Attribute;
-import Serialized = interfaces.Serialized;
-import TYPES = enums.TYPES
+import {
+    ICompiler,
+    ItemData,
+    Attribute,
+    Serialized
+} from './compiler.i';
+import {TYPES} from './compiler.e';
 
 interface Item extends Serialized<ItemData>{}
 
@@ -239,10 +238,10 @@ class PlaceholderItem {
     };
 }
 
-class Compiler implements ICompiler<string> {
+export default class HtmlCompiler implements ICompiler<string> {
 
     constructor(data:Item) {
-        this.html = Compiler.render(data).replace(new RegExp(Placeholders.BLOCK + '_','g'), '');
+        this.html = HtmlCompiler.render(data).replace(new RegExp(Placeholders.BLOCK + '_','g'), '');
     }
 
     public compile():string {
@@ -250,10 +249,10 @@ class Compiler implements ICompiler<string> {
     }
 
     private static render(item:Item):string {
-        var item_code:string = Compiler.renderItem(item),
-            children_code:string = Compiler.renderChildren(item);
+        var item_code:string = HtmlCompiler.renderItem(item),
+            children_code:string = HtmlCompiler.renderChildren(item);
 
-        return Compiler.applyChildren(item_code, children_code);
+        return HtmlCompiler.applyChildren(item_code, children_code);
     }
 
     private static renderItem(item:Item):string {
@@ -291,9 +290,9 @@ class Compiler implements ICompiler<string> {
     }
 
     private static renderChildren(item:Item):string {
-        return Compiler.mergeChildren(
+        return HtmlCompiler.mergeChildren(
             _.map(item.children, (child) => {
-                return Compiler.render(child);
+                return HtmlCompiler.render(child);
             }),
             item
         );
@@ -301,6 +300,4 @@ class Compiler implements ICompiler<string> {
 
     private html:string;
 }
-
-export = Compiler;
 

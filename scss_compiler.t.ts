@@ -4,15 +4,14 @@
  */
 
 import _ = require('underscore');
-import interfaces = require('./compiler.i');
-import enums = require('./compiler.e');
+import {TYPES} from './compiler.e';
+import {
+    ICompiler,
+    ItemData,
+    Serialized
+} from './compiler.i';
 
-import ICompiler = interfaces.ICompiler;
-import ItemData = interfaces.ItemData;
-import Serialized = interfaces.Serialized;
-import TYPES = enums.TYPES
-
-class Compiler implements ICompiler<string> {
+export default class ScssCompiler implements ICompiler<string> {
 
     constructor(data:Serialized<ItemData>) {
         this.scss = this.renderToSCSS(data).replace(/{BLOCK}_/g, '');
@@ -24,7 +23,7 @@ class Compiler implements ICompiler<string> {
 
 
     private renderToSCSS(item:Serialized<ItemData>):string {
-        var scss:string = Compiler.renderSCSSTemplate(item),
+        var scss:string = ScssCompiler.renderSCSSTemplate(item),
             children_scss:string[] = [],
             children_scss_string:string;
 
@@ -63,7 +62,7 @@ class Compiler implements ICompiler<string> {
                 template = '{name} {\n{CHILDREN}\n}';
             }
 
-            name = Compiler.compileElementName(item);
+            name = ScssCompiler.compileElementName(item);
 
             return template.replace('{name}', name);
         } else {
@@ -90,5 +89,3 @@ class Compiler implements ICompiler<string> {
 
     private scss:string;
 }
-
-export = Compiler;
