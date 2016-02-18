@@ -1,5 +1,6 @@
 /**
- * Created by Ivan on 15/07/15.
+ * Copyright (c) 2016 Ivan Bausov <ivan.bausov@gmail.com> (MIT Licensed)
+ * A part of B:STRUCT package <https://github.com/ivan-bausov/bstruct>
  */
 
 export interface ICompiler<TOutput> {
