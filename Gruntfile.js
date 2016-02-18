@@ -7,6 +7,8 @@ module.exports = function (grunt) {
         ts: {
             compile: {
                 src: [
+                    "./typings/main.d.ts",
+                    "./**/*.e.ts",
                     "./**/*.t.ts",
                     "./**/*.i.ts"
                 ],

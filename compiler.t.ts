@@ -3,10 +3,6 @@
  * A part of B:STRUCT package <https://github.com/ivan-bausov/bstruct>
  */
 
-/// <reference path="./definitions/node-0.10.d.ts" />
-/// <reference path="./definitions/node-0.10.d.ts" />
-/// <reference path="./definitions/underscore.d.ts" />
-
 import _ = require('underscore');
 import {ItemData, Serialized} from './compiler.i';
 import {TYPES} from './compiler.e';

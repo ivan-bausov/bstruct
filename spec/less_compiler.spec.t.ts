@@ -1,8 +1,6 @@
 /**
  * Created by Ivan on 18/07/15.
  */
-/// <reference path="../definitions/jasmine.d.ts" />
-/// <reference path="../definitions/node-0.10.d.ts" />
 
 import fs = require('fs');
 import {
