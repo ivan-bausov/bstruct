@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015 Ivan Bausov <ivan.bausov@gmail.com> (MIT Licensed)
+ * Copyright (c) 2016 Ivan Bausov <ivan.bausov@gmail.com> (MIT Licensed)
  * A part of B:STRUCT package <https://github.com/ivan-bausov/bstruct>
  */
 
