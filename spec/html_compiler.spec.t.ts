@@ -6,9 +6,9 @@ import fs = require('fs');
 import {
     ItemData,
     Serialized
-} from '../compiler.i';
-import {TYPES} from '../compiler.e';
-import Compiler from '../html_compiler.t';
+} from '../sources/compiler.i';
+import {TYPES} from '../sources/compiler.e';
+import Compiler from '../sources/html_compiler.t';
 
 describe('HtmlCompiler', () => {
 

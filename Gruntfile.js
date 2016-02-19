@@ -28,8 +28,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            '*.t.js',
-                            '*.e.js',
+                            'sources/*.t.js',
+                            'sources/*.e.js',
                             'bin/bstruct',
                             'index.js',
                             'README.md'

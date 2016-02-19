@@ -6,9 +6,9 @@ import fs = require('fs');
 import {
     ItemData,
     Serialized
-} from '../compiler.i';
-import {TYPES} from '../compiler.e';
-import Compiler from '../less_compiler.t';
+} from '../sources/compiler.i';
+import {TYPES} from '../sources/compiler.e';
+import Compiler from '../sources/less_compiler.t';
 
 describe('LessCompiler', () => {
 

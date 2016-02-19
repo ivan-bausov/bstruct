@@ -3,7 +3,7 @@
  */
 
 import fs = require('fs');
-import Compiler from '../compiler.t';
+import Compiler from '../sources/compiler.t';
 import {readContent} from './helpers.t';
 
 describe('compiler.getHTML', () => {

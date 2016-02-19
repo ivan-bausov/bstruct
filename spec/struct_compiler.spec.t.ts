@@ -3,9 +3,9 @@
  */
 
 import fs = require('fs');
-import {ItemData} from '../compiler.i';
-import Compiler from '../struct_compiler.t';
-import {TYPES} from '../compiler.e';
+import {ItemData} from '../sources/compiler.i';
+import Compiler from '../sources/struct_compiler.t';
+import {TYPES} from '../sources/compiler.e';
 import {readContent} from './helpers.t';
 
 describe('struct_compiler.getSourceStrings', () => {

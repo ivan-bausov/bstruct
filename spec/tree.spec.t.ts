@@ -2,7 +2,7 @@
  * Created by Ivan on 15/07/15.
  */
 
-import Tree from '../tree.t';
+import Tree from '../sources/tree.t';
 
 describe('Tree', () => {
 
